@@ -20,7 +20,7 @@ MessageBox::MessageBox(char *pWndTitle, char *pMsgText) {
     box(hWnd, 0, 0);                            // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         hWnd,
-        0, (hWidth - strlen(hTitle)) / 2,
+        0, (hWidth - strlen(hTitle) - 4) / 2,
         "\u2524 %s \u251c", hTitle
     );
 
@@ -28,7 +28,7 @@ MessageBox::MessageBox(char *pWndTitle, char *pMsgText) {
         hWnd, 2, 2, "%s", hMsgText
     );
 
-    wbkgd(hWnd, COLOR_PAIR(3));
+    wbkgd(hWnd, COLOR_PAIR(4));
 
     wrefresh(hWnd);
 }

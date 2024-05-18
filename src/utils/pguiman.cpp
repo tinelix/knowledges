@@ -29,6 +29,9 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
 
         init_color(COLOR_DEEP_BLACK, 0, 0, 0);  //  <-- create RGB value for COLOR_DEEP_BLACK variable
         init_pair(3, COLOR_WHITE, COLOR_DEEP_BLACK);
+
+        init_color(COLOR_RED, 192, 0, 0);  //  <-- create RGB value for COLOR_BLUE variable
+        init_pair(4, COLOR_WHITE, COLOR_RED);
     }
 
     bkgd(COLOR_PAIR(3));

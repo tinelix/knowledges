@@ -170,12 +170,11 @@ void IKnowledgesPseudoGUIManager::onKeyPressed(char k, ExtWindowCtrl* pExtWnd) {
                         gPsGuiMan->listenKeyboard(gFileManWnd);
                     }
                 #endif
+                if (k == 'q') {
+                    delete gFileManWnd;
+                }
             }
         }
-    }
-
-    if (k == 'q') {
-        delete gFileManWnd;
     }
 }
 
