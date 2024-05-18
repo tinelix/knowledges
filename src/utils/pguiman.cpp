@@ -1,5 +1,4 @@
 #include "pguiman.h"
-#include <curses.h>
 #include <locale.h>
 
 char key;
@@ -7,8 +6,10 @@ char key;
 /* Initializes ncurses screen. */
 
 PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
-    setlocale(LC_ALL, "");
-    initscr();
+    setlocale(LC_ALL, "");                      /* <-- set locale for correct non-ASCII characters
+                                                       displaying */
+    initscr();                                  /* <-- temporally clearing command prompt and initializes
+                                                       empty screen of ncurses */
     keypad(stdscr, true);                       // <-- enables arrow pressed keys handling
 
     noecho();                                   /* <-- disables escaping of characters typed on the
@@ -40,7 +41,7 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
 void PseudoGUIManager::showTopVersionInfo() {
     getmaxyx(stdscr, gActiveHeight, gActiveWidth);
 
-    char verInfoStr[] = "Tinelix OpenDSS v. 0.0.1. Copyright (C) 2024 Dmitry Tretyakov\n";
+    char verInfoStr[] = "Tinelix Knowledges v. 0.0.1. Copyright (C) 2024 Dmitry Tretyakov\n";
 
     /*      int int
      * move( y , x )                                                <-- moves cursor
@@ -163,4 +164,5 @@ void PseudoGUIManager::clearWindow(ExtWindowCtrl* pExtWnd) {
 
 PseudoGUIManager::~PseudoGUIManager() {
     endwin();
+    delscreen((SCREEN*)stdscr);
 }
