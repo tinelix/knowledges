@@ -21,9 +21,13 @@ int ExtWindowCtrl::getControlsSize() {
     return sizeof(hCtrls) / sizeof(UIControl*);
 }
 
+void ExtWindowCtrl::redraw() {
+    touchwin(hWnd);
+    wnoutrefresh(hWnd);
+}
+
 void ExtWindowCtrl::freeWnd() {
     wclear(hWnd);
-    wbkgd(hWnd, COLOR_PAIR(2));
     wrefresh(hWnd);
     delwin(hWnd);
     refresh();

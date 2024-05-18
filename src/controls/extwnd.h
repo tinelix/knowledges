@@ -22,6 +22,7 @@ public:
     UIControl** hCtrls;
     void addControl(UIControl* pCtrl);
     int getControlsSize();
+    void redraw();
     void freeWnd();
 };
 
