@@ -1,5 +1,5 @@
-#ifndef OPENDSS_UTILS_FILEMAN_H
-#define OPENDSS_UTILS_FILEMAN_H
+#ifndef KNOWLEDGES_UTILS_FILEMAN_H
+#define KNOWLEDGES_UTILS_FILEMAN_H
 
 #include <dirent.h>
 #include <unistd.h>

@@ -1,3 +1,4 @@
+#include <cstring>
 #ifdef __MINGW64__
     #include <ncurses/ncurses.h>
     #include <nstddef.h>
@@ -16,6 +17,7 @@
 
 #include "controls/extwnd.h"
 #include "controls/listbox.h"
+#include "controls/msgbox.h"
 
 #include "interfaces/fileman.h"
 #include "interfaces/pguiman.h"
@@ -131,38 +133,47 @@ void IKnowledgesPseudoGUIManager::onKeyPressed(char k, ExtWindowCtrl* pExtWnd) {
             if(gFileManWnd->getControlsSize() > 0) {
                 mFileListBox->onKeyPressed(k);
             }
+            gPsGuiMan->listenKeyboard(pExtWnd);
         }
     } else if((int)k == 10) { // ENTER key
         if(strcmp(pExtWnd->id, "fileManWnd") == 0
-            || strcmp(pExtWnd->id, "articlesListWnd")) {
-            ListBoxCtrl* mFileListBox = ((ListBoxCtrl*)gFileManWnd->hCtrls[0]);
+            || strcmp(pExtWnd->id, "articlesListWnd") == 0) {
+            ListBoxCtrl* mFileListBox = ((ListBoxCtrl*)pExtWnd->hCtrls[0]);
             if(strcmp(pExtWnd->id, "fileManWnd") == 0) {
                 char fname[255];
                 dirent* ent = gFileMan->getFile(
                     mFileListBox->getSelectionIndex()
                 );
                 sprintf(fname, "%s/%s", gFileMan->getCurrentPath(), ent->d_name);
+
                 #ifdef __MINGW64__
                     struct stat s;
                     stat(fname, &s);
                     if (s.st_mode & S_IFDIR) {
                         gFileMan->readDir(fname);
+                        gPsGuiMan->listenKeyboard(pExtWnd);
+                    } else {
+                        char msgText[] = "I choosed this file!";
+                        MessageBox* pMsgBox = new MessageBox(msgText, fname);
+                        gPsGuiMan->listenKeyboard((ExtWindowCtrl*)pMsgBox);
                     }
                 #else
                     if(ent->d_type == 4) { // if it's directory
                         gFileMan->readDir(fname);
+                        gPsGuiMan->listenKeyboard(pExtWnd);
+                    } else {
+                        char msgText[] = "I choosed this file!";
+                        MessageBox* pMsgBox = new MessageBox(msgText, fname);
+                        gPsGuiMan->listenKeyboard((ExtWindowCtrl*)pMsgBox);
+                        ((ExtWindowCtrl*)pMsgBox)->freeWnd();
+                        gPsGuiMan->listenKeyboard(gFileManWnd);
                     }
                 #endif
-            } else {
-
             }
         }
-
     }
 
-    if(k != 'q') {
-        gPsGuiMan->listenKeyboard(gFileManWnd);
-    } else {
+    if (k == 'q') {
         delete gFileManWnd;
     }
 }

@@ -1,5 +1,5 @@
-#ifndef OPENDSS_CONTROLS_EXTWND_H
-#define OPENDSS_CONTROLS_EXTWND_H
+#ifndef KNOWLEDGES_CONTROLS_EXTWND_H
+#define KNOWLEDGES_CONTROLS_EXTWND_H
 
 #ifdef __MINGW64__
     #include <ncurses/ncurses.h>
@@ -13,6 +13,7 @@
 
 class ExtWindowCtrl {
 public:
+    ExtWindowCtrl();
     ExtWindowCtrl(char* pId);
     ~ExtWindowCtrl();
     char hTitle[255], id[60];
@@ -21,6 +22,7 @@ public:
     UIControl** hCtrls;
     void addControl(UIControl* pCtrl);
     int getControlsSize();
+    void freeWnd();
 };
 
 #endif

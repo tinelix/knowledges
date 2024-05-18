@@ -1,7 +1,6 @@
-#ifndef OPENDSS_INTERFACES_PGUIMAN_H
-#define OPENDSS_INTERFACES_PGUIMAN_H
+#ifndef KNOWLEDGES_INTERFACES_PGUIMAN_H
+#define KNOWLEDGES_INTERFACES_PGUIMAN_H
 
-#include "../utils/pguiman.h"
 #include "../controls/extwnd.h"
 
 class IPseudoGUIManager {
@@ -12,4 +11,4 @@ class IPseudoGUIManager {
         virtual void onKeyPressed(char k, ExtWindowCtrl* pExtWnd) = 0;
 };
 
-#endif // OPENDSS_INTERFACES_PGUIMAN_H
+#endif // KNOWLEDGES_INTERFACES_PGUIMAN_H

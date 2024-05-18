@@ -1,5 +1,6 @@
 #include "listbox.h"
 #include <cstring>
+#include <curses.h>
 
 ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount) {
     gParent = pParent;
@@ -69,6 +70,10 @@ int ListBoxCtrl::getVirtualSelectionIndex() {
 
 int ListBoxCtrl::getItemCount() {
     return gItemCount;
+}
+
+int ListBoxCtrl::getPageNumber() {
+    return gPageNumber;
 }
 
 void ListBoxCtrl::goToPage(int pPageNumb) {

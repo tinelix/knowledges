@@ -1,5 +1,5 @@
-#ifndef OPENDSS_CONTROLS_LISTBOX_H
-#define OPENDSS_CONTROLS_LISTBOX_H
+#ifndef KNOWLEDGES_CONTROLS_LISTBOX_H
+#define KNOWLEDGES_CONTROLS_LISTBOX_H
 
 #include "extwnd.h"
 #include "../utils/uictrl.h"
@@ -27,6 +27,7 @@ class ListBoxCtrl : UIControl {
         void drawListPointer(int x, int y, bool isVisible);
         void goToPage(int pPageNumber);
         void recreate(int pItemCount);
+        int getPageNumber();
         int getItemCount();
         int hX, hY, hWidth, hHeight;
         struct ListItem**   gListItems;

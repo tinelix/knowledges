@@ -1,5 +1,5 @@
-#ifndef OPENDSS_UTILS_PGUIMAN_H
-#define OPENDSS_UTILS_PGUIMAN_H
+#ifndef KNOWLEDGES_UTILS_PGUIMAN_H
+#define KNOWLEDGES_UTILS_PGUIMAN_H
 
 #ifdef __MINGW64__
     #include <ncurses/ncurses.h>
@@ -18,7 +18,6 @@
 
 class PseudoGUIManager {
     public:
-        int gActiveWidth, gActiveHeight;
         PseudoGUIManager(IPseudoGUIManager *interface);
         ~PseudoGUIManager();
         void showTopVersionInfo();
@@ -27,10 +26,11 @@ class PseudoGUIManager {
         ExtWindowCtrl* createWindow(char* id, char* title, int width, int height, bool alignCenter);
         void clearWindow(ExtWindowCtrl* pExtWnd);
         void drawText(ExtWindowCtrl *wnd, char* text, int x, int y);
+        int gActiveWidth, gActiveHeight;
     private:
         IPseudoGUIManager   *gInterface;
         ExtWindowCtrl       *gWnd;
         char                gWndTitle[255];
 };
 
-#endif // OPENDSS_UTILS_PGUIMAN_H
+#endif // KNOWLEDGES_UTILS_PGUIMAN_H

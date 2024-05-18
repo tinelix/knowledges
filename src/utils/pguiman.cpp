@@ -34,12 +34,13 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
     bkgd(COLOR_PAIR(3));
 
     gInterface = interface;
+
+    getmaxyx(stdscr, gActiveHeight, gActiveWidth);
 }
 
 /* Shows version info and copyright in console top area. */
 
 void PseudoGUIManager::showTopVersionInfo() {
-    getmaxyx(stdscr, gActiveHeight, gActiveWidth);
 
     char verInfoStr[] = "Tinelix Knowledges v. 0.0.1. Copyright (C) 2024 Dmitry Tretyakov\n";
 
@@ -71,9 +72,9 @@ void PseudoGUIManager::listenKeyboard() {
     gInterface->onKeyPressed(key);
 }
 
-void PseudoGUIManager::listenKeyboard(ExtWindowCtrl *pExtWnd) {
-    key = wgetch(pExtWnd->hWnd);
-    gInterface->onKeyPressed(key, pExtWnd);
+void PseudoGUIManager::listenKeyboard(ExtWindowCtrl* hWndCtrl) {
+    key = wgetch(hWndCtrl->hWnd);
+    gInterface->onKeyPressed(key, hWndCtrl);
 }
 
 /* Draws text in window. */
