@@ -24,7 +24,7 @@ class PseudoGUIManager {
         void showTopVersionInfo();
         void listenKeyboard();
         void listenKeyboard(ExtWindowCtrl *pExtWnd);
-        ExtWindowCtrl* createWindow(char* title, int width, int height, bool alignCenter);
+        ExtWindowCtrl* createWindow(char* id, char* title, int width, int height, bool alignCenter);
         void clearWindow(ExtWindowCtrl* pExtWnd);
         void drawText(ExtWindowCtrl *wnd, char* text, int x, int y);
     private:

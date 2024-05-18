@@ -1,6 +1,7 @@
 #include "extwnd.h"
 
-ExtWindowCtrl::ExtWindowCtrl() {
+ExtWindowCtrl::ExtWindowCtrl(char* pId) {
+    sprintf(id, "%s", pId);
     hCtrls = (UIControl**)malloc(sizeof(UIControl) * 255);
 }
 
@@ -15,3 +16,4 @@ void ExtWindowCtrl::addControl(UIControl* pCtrl) {
 int ExtWindowCtrl::getControlsSize() {
     return sizeof(hCtrls) / sizeof(UIControl*);
 }
+

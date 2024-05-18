@@ -13,7 +13,7 @@
 
 class ExtWindowCtrl {
 public:
-    ExtWindowCtrl();
+    ExtWindowCtrl(char* pId);
     ~ExtWindowCtrl();
     char hTitle[255], id[60];
     int hWidth, hHeight;

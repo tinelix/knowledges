@@ -5,11 +5,11 @@ echo "Building Tinelix Knowledges..."
 if [[ $OSTYPE == "linux-gnu" ]]; then
     echo "Your OS: GNU/Linux"
     echo
-    if [ -x "$(command -v apt)" ]; then                                      # <-- for Ubuntu/Debian/derivatives
+    if [ -x "$(command -v apt)" ]; then         # <-- for Ubuntu/Debian/derivatives
         su -c "apt install -y libncurses-dev"
-    elif [ -x "$(command -v yum)" ]; then                                    # <-- for Fedora/CentOS/AltLinux/derivatives
+    elif [ -x "$(command -v yum)" ]; then       # <-- for Fedora/CentOS/AltLinux/derivatives
         su -c "yum install ncurses-devel"
-    elif [ -x "$(command -v pacman)" ]; then                                 # <-- for Arch/Artix/Manjaro/derivatives
+    elif [ -x "$(command -v pacman)" ]; then    # <-- for Arch/Artix/Manjaro/derivatives
         su -c "pacman -S ncurses"
     else
         echo "ERROR: Your package manager is not supported"

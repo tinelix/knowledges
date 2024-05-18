@@ -102,8 +102,8 @@ void PseudoGUIManager::drawText(ExtWindowCtrl *pExtWnd, char* text, int x, int y
 
 /* Create window area with titlebar. */
 
-ExtWindowCtrl* PseudoGUIManager::createWindow(char* title, int width, int height, bool alignCenter) {
-    ExtWindowCtrl *pExtWnd = new ExtWindowCtrl();
+ExtWindowCtrl* PseudoGUIManager::createWindow(char* id, char* title, int width, int height, bool alignCenter) {
+    ExtWindowCtrl *pExtWnd = new ExtWindowCtrl(id);
 
     /*                       int     int   int int
      * WINDOW* wnd = newwin(height, width,  y , x ) <-- creates new window inside console screen

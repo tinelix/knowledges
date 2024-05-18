@@ -47,8 +47,8 @@ ExtWindowCtrl                   *gFileManWnd;
 
 void openFileManager() {
     char wndTitle[] = "File Manager";
-    gFileManWnd = gPsGuiMan->createWindow(wndTitle, -2, -2, true);
-    sprintf(gFileManWnd->id, "fm_wnd");
+    char wndId[] = "fileManWnd";
+    gFileManWnd = gPsGuiMan->createWindow(wndId, wndTitle, -2, -2, true);
     gFileMan->readCurrentDir();
 }
 
@@ -112,7 +112,7 @@ void IKnowledgesFileManager::onDirectoryRead(dirent** ents) {
             sprintf(item->title + MAX_FILENAME_LENGTH - 3, "...");
         }
         if(i <= mFileListBox->hHeight
-            && ExtString::strendq(ents[i]->d_name, ".mp3"))  {
+            && ExtString::strendq(ents[i]->d_name, ".json"))  {
             char full_fname[600];
             sprintf(full_fname, "%s/%s", gFileMan->getCurrentPath(), ents[i]->d_name);
         }
@@ -127,29 +127,36 @@ void IKnowledgesFileManager::onDirectoryRead(dirent** ents) {
 void IKnowledgesPseudoGUIManager::onKeyPressed(char k, ExtWindowCtrl* pExtWnd) {
     if((int)k == 2 || (int)k == 3) {
         ListBoxCtrl* mFileListBox = ((ListBoxCtrl*)gFileManWnd->hCtrls[0]);
-        if(strcmp(pExtWnd->id, "fm_wnd") == 0) {
+        if(strcmp(pExtWnd->id, "fileManWnd") == 0) {
             if(gFileManWnd->getControlsSize() > 0) {
                 mFileListBox->onKeyPressed(k);
             }
         }
     } else if((int)k == 10) { // ENTER key
-        ListBoxCtrl* mFileListBox = ((ListBoxCtrl*)gFileManWnd->hCtrls[0]);
-        char fname[255];
-        dirent* ent = gFileMan->getFile(
-            mFileListBox->getSelectionIndex()
-        );
-        sprintf(fname, "%s/%s", gFileMan->getCurrentPath(), ent->d_name);
-        #ifdef __MINGW64__
-            struct stat s;
-            stat(fname, &s);
-            if (s.st_mode & S_IFDIR) {
-                gFileMan->readDir(fname);
+        if(strcmp(pExtWnd->id, "fileManWnd") == 0
+            || strcmp(pExtWnd->id, "articlesListWnd")) {
+            ListBoxCtrl* mFileListBox = ((ListBoxCtrl*)gFileManWnd->hCtrls[0]);
+            if(strcmp(pExtWnd->id, "fileManWnd") == 0) {
+                char fname[255];
+                dirent* ent = gFileMan->getFile(
+                    mFileListBox->getSelectionIndex()
+                );
+                sprintf(fname, "%s/%s", gFileMan->getCurrentPath(), ent->d_name);
+                #ifdef __MINGW64__
+                    struct stat s;
+                    stat(fname, &s);
+                    if (s.st_mode & S_IFDIR) {
+                        gFileMan->readDir(fname);
+                    }
+                #else
+                    if(ent->d_type == 4) { // if it's directory
+                        gFileMan->readDir(fname);
+                    }
+                #endif
+            } else {
+
             }
-        #else
-            if(ent->d_type == 4) { // if it's directory
-                gFileMan->readDir(fname);
-            }
-        #endif
+        }
 
     }
 
