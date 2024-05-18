@@ -24,7 +24,9 @@ MessageBox::MessageBox(char *pWndTitle, char *pMsgText) {
         "\u2524 %s \u251c", hTitle
     );
 
-    drawMessageText();
+    mvwprintw(                                  // <-- draw message text
+        hWnd, 2, 2, "%s", hMsgText
+    );
 
     wbkgd(hWnd, COLOR_PAIR(3));
 
@@ -32,9 +34,5 @@ MessageBox::MessageBox(char *pWndTitle, char *pMsgText) {
 }
 
 void MessageBox::drawMessageText() {
-    mvwprintw(                                  // <-- draw window text in top border area
-        hWnd,
-        2, 2,
-        "%s", hMsgText
-    );
+
 }

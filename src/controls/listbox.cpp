@@ -81,9 +81,10 @@ void ListBoxCtrl::goToPage(int pPageNumb) {
         gPageNumber = 0;
     if(gItemCount < (pPageNumb) * hHeight) return;
     gPageNumber = pPageNumb;
+
+    gParent->redraw();
+
     for(int y = 0; y <= hHeight; y++) {
-        wmove(gParent->hWnd, hY+y, 0);
-        wclrtoeol(gParent->hWnd);
         ListItem* item = gListItems[(pPageNumb * hHeight) + y];
         if(item != NULL)  {
             mvwprintw(gParent->hWnd, y + hY, 4, "%s", item->title);

@@ -166,6 +166,7 @@ void IKnowledgesPseudoGUIManager::onKeyPressed(char k, ExtWindowCtrl* pExtWnd) {
                         MessageBox* pMsgBox = new MessageBox(msgText, fname);
                         gPsGuiMan->listenKeyboard((ExtWindowCtrl*)pMsgBox);
                         ((ExtWindowCtrl*)pMsgBox)->freeWnd();
+                        gFileManWnd->redraw();
                         gPsGuiMan->listenKeyboard(gFileManWnd);
                     }
                 #endif

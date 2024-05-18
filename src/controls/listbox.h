@@ -2,7 +2,7 @@
 #define KNOWLEDGES_CONTROLS_LISTBOX_H
 
 #include "extwnd.h"
-#include "../utils/uictrl.h"
+#include "uictrl.h"
 #include "../utils/extstr.h"
 
 #ifdef __MINGW64__

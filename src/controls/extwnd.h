@@ -7,7 +7,7 @@
     #include <ncurses.h>
 #endif
 
-#include "../utils/uictrl.h"
+#include "uictrl.h"
 #include <stdio.h>
 #include <stdlib.h>
 

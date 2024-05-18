@@ -23,7 +23,7 @@ int ExtWindowCtrl::getControlsSize() {
 
 void ExtWindowCtrl::redraw() {
     touchwin(hWnd);
-    wnoutrefresh(hWnd);
+    wrefresh(hWnd);
 }
 
 void ExtWindowCtrl::freeWnd() {
