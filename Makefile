@@ -20,7 +20,7 @@ EXT_INCLUDES 	       += -I./libs/jsoncpp/include
 POSTLIBS		= -lncursesw $(EXT_INCLUDES) -lstdc++
 
 # Source codes
-SOURCES=$(SRC_DIR)/*.cpp $(SRC_DIR)/utils/*.cpp $(SRC_DIR)/controls/*.cpp $(LIBS_DIR)/jsoncpp/src/lib_json/*.cpp
+SOURCES=$(SRC_DIR)/*.cpp $(SRC_DIR)/utils/*.cpp $(SRC_DIR)/windows/*.cpp $(SRC_DIR)/controls/*.cpp $(LIBS_DIR)/jsoncpp/src/lib_json/*.cpp
 OUT_FILE=$(OUT_DIR)/knowledges
 SA_OUT_FILE=$(OUT_DIR)/knowledges.o
 

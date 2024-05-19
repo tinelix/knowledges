@@ -14,7 +14,7 @@ struct KBArticle {
     char*                       content;
 };
 
-struct KBCategories {
+struct KBCategory {
     int                         id;
     char                        title[25];
     struct KBArticle**          articles;
@@ -25,16 +25,21 @@ class KnowledgeBase {
     public:
         KnowledgeBase(char* pFileName);
         ~KnowledgeBase();
-        // struct KBCategories**   getCategories();
+        struct KBCategory**     getCategories();
         // struct KBArticle*       getArticle(int pId);
         int                     getCategoriesCount();
         char*                   getTitle();
+        int                     getState();
+        char*                   getErrorMessageText();
     private:
-        struct KBCategories**   gCategories;
+        struct KBCategory**     gCategories;
         int                     gCategoriesCount;
-        Json::Value             gValues;
         Json::Reader            gReader;
+        Json::Value             gValues;
+        Json::Value             gTkwn0;
         char*                   gTitle;
+        char*                   gBuffer;
+        int                     gState;
 };
 
 #endif

@@ -16,21 +16,17 @@ ListBoxCtrl::~ListBoxCtrl() {
 }
 
 void ListBoxCtrl::recreate(int pItemCount) {
-    for(int y = 0; y <= hHeight; y++) {
-        wmove(gParent->hWnd, hY+y, 0);
-        wclrtoeol(gParent->hWnd);
+    for(int y = hY; y <= (hHeight + hY); y++) {
+        for(int x = hX; x <= (hWidth + hX); x++) {
+            mvwaddch(gParent->hWnd, y, x, ' ');
+        }
     }
+    wrefresh(gParent->hWnd);
     free(gListItems);
     gListItems = (ListItem**) malloc(pItemCount * sizeof(ListItem));
     gPageNumber = 0;
     gSelectionIndex = 0;
     gItemCount = pItemCount;
-    box(gParent->hWnd, 0, 0);                   // <-- draw window borders
-    mvwprintw(                                  // <-- draw window text in top border area
-        gParent->hWnd,
-        0, (gParent->hWidth - strlen(gParent->hTitle) - 4) / 2,
-        "\u2524 %s \u251c", gParent->hTitle
-    );
 }
 
 void ListBoxCtrl::addListItem(int index, ListItem* item) {
@@ -82,10 +78,12 @@ void ListBoxCtrl::goToPage(int pPageNumb) {
     if(gItemCount < (pPageNumb) * hHeight) return;
     gPageNumber = pPageNumb;
 
-    for(int y = 0; y <= hHeight; y++) {
-        wmove(gParent->hWnd, hY+y, 0);
-        wclrtoeol(gParent->hWnd);
+    for(int y = hY; y <= (hHeight + hY); y++) {
+        for(int x = hX; x <= (hWidth + hX); x++) {
+            mvwaddch(gParent->hWnd, y, x, ' ');
+        }
     }
+
 
     for(int y = 0; y <= hHeight; y++) {
         ListItem* item = gListItems[(pPageNumb * hHeight) + y];
@@ -93,13 +91,6 @@ void ListBoxCtrl::goToPage(int pPageNumb) {
             mvwprintw(gParent->hWnd, y + hY, 4, "%s", item->title);
         }
     }
-
-    box(gParent->hWnd, 0, 0);                   // <-- draw window borders
-    mvwprintw(                                  // <-- draw window text in top border area
-        gParent->hWnd,
-        0, (gParent->hWidth - strlen(gParent->hTitle)) / 2,
-        "\u2524 %s \u251c", gParent->hTitle
-    );
 }
 
 void ListBoxCtrl::onKeyPressed(char k) {
@@ -153,10 +144,10 @@ void ListBoxCtrl::onKeyPressed(char k) {
 void ListBoxCtrl::drawListPointer(int x, int y, bool isVisible) {
     if(isVisible) {
         mvwaddch(gParent->hWnd, y, x, '*');  // Adds a star pointer to the specified position
-        mvwchgat(gParent->hWnd, y, x, gParent->hWidth - 4, A_BOLD, 1, NULL);
+        mvwchgat(gParent->hWnd, y, x, hWidth, A_BOLD, 1, NULL);
     } else {
         mvwaddch(gParent->hWnd, y, x, ' ');  // Removes a star pointer to the specified position
-        mvwchgat(gParent->hWnd, y, x, gParent->hWidth - 4, A_NORMAL, 2, NULL);
+        mvwchgat(gParent->hWnd, y, x, hWidth, A_NORMAL, 2, NULL);
     }
 
     wrefresh(gParent->hWnd);

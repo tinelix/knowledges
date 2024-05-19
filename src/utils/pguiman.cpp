@@ -135,7 +135,9 @@ ExtWindowCtrl* PseudoGUIManager::createWindow(char* id, char* title, int width, 
             realHeight = height;
         }
 
-        pExtWnd->hWnd = newwin(realHeight, realWidth, ((gActiveHeight - realHeight) / 2) + 1, (gActiveWidth - realWidth) / 2);
+        pExtWnd->hWnd = newwin(realHeight, realWidth,
+                               ((gActiveHeight - realHeight) / 2) + 1,
+                               (gActiveWidth - realWidth) / 2);
     } else {
         realWidth = width;
         realHeight = height;
