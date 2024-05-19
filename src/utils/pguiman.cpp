@@ -93,7 +93,7 @@ void PseudoGUIManager::drawText(ExtWindowCtrl *pExtWnd, char* text, int x, int y
     box(pExtWnd->hWnd, 0, 0);                   // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         pExtWnd->hWnd,
-        0, (pExtWnd->hWidth - strlen(pExtWnd->hTitle)) / 2,
+        0, (pExtWnd->hWidth - strlen(pExtWnd->hTitle) - 4) / 2,
         "\u2524 %s \u251c", pExtWnd->hTitle
     );
 
@@ -116,6 +116,8 @@ ExtWindowCtrl* PseudoGUIManager::createWindow(char* id, char* title, int width, 
     int realWidth = 12;
     int realHeight = 12;
 
+    getmaxyx(stdscr, gActiveHeight, gActiveWidth);
+
     if(alignCenter) {
         if(width > gActiveWidth) {
             realWidth = gActiveWidth - 6;
@@ -135,6 +137,8 @@ ExtWindowCtrl* PseudoGUIManager::createWindow(char* id, char* title, int width, 
 
         pExtWnd->hWnd = newwin(realHeight, realWidth, ((gActiveHeight - realHeight) / 2) + 1, (gActiveWidth - realWidth) / 2);
     } else {
+        realWidth = width;
+        realHeight = height;
         pExtWnd->hWnd = newwin(realHeight, realWidth, 1, 0);
     }
 
@@ -146,7 +150,7 @@ ExtWindowCtrl* PseudoGUIManager::createWindow(char* id, char* title, int width, 
     box(pExtWnd->hWnd, 0, 0);                   // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         pExtWnd->hWnd,
-        0, (realWidth - strlen(pExtWnd->hTitle)) / 1.5,
+        0, (pExtWnd->hWidth - strlen(pExtWnd->hTitle) - 4) / 2,
         "\u2524 %s \u251c", pExtWnd->hTitle
     );
 
@@ -160,10 +164,11 @@ ExtWindowCtrl* PseudoGUIManager::createWindow(char* id, char* title, int width, 
 
 void PseudoGUIManager::clearWindow(ExtWindowCtrl* pExtWnd) {
     wclear(pExtWnd->hWnd);
+
     box(pExtWnd->hWnd, 0, 0);                   // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         pExtWnd->hWnd,
-        0, (pExtWnd->hWidth - strlen(pExtWnd->hTitle)) / 1.5,
+        0, (pExtWnd->hWidth - strlen(pExtWnd->hTitle) - 4) / 2,
         "\u2524 %s \u251c", pExtWnd->hTitle
     );
     wrefresh(pExtWnd->hWnd);

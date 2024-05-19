@@ -28,7 +28,7 @@ void ListBoxCtrl::recreate(int pItemCount) {
     box(gParent->hWnd, 0, 0);                   // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         gParent->hWnd,
-        0, (gParent->hWidth - strlen(gParent->hTitle)) / 2,
+        0, (gParent->hWidth - strlen(gParent->hTitle) - 4) / 2,
         "\u2524 %s \u251c", gParent->hTitle
     );
 }
@@ -82,7 +82,10 @@ void ListBoxCtrl::goToPage(int pPageNumb) {
     if(gItemCount < (pPageNumb) * hHeight) return;
     gPageNumber = pPageNumb;
 
-    gParent->redraw();
+    for(int y = 0; y <= hHeight; y++) {
+        wmove(gParent->hWnd, hY+y, 0);
+        wclrtoeol(gParent->hWnd);
+    }
 
     for(int y = 0; y <= hHeight; y++) {
         ListItem* item = gListItems[(pPageNumb * hHeight) + y];
