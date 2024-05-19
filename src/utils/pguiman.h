@@ -14,6 +14,7 @@
 #include "../controls/extwnd.h"
 
 #define COLOR_GRAY 242
+#define COLOR_DARK_GREEN 28
 #define COLOR_DEEP_BLACK 16
 
 class PseudoGUIManager {

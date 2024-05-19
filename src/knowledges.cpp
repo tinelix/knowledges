@@ -14,6 +14,7 @@
 #include "utils/fileman.h"
 #include "utils/pguiman.h"
 #include "utils/extstr.h"
+#include "utils/knowbase.h"
 
 #include "controls/extwnd.h"
 #include "controls/listbox.h"
@@ -43,7 +44,11 @@ IKnowledgesPseudoGUIManager     *gPsGUIManInterface;
 
 PseudoGUIManager                *gPsGuiMan;
 FileManager                     *gFileMan;
+
 ExtWindowCtrl                   *gFileManWnd;
+ExtWindowCtrl                   *gKbWnd;
+
+KnowledgeBase                   *gKb;
 
 /* Creates File Manager window and shows directory listing. */
 
@@ -72,12 +77,27 @@ int main() {
     return 0;
 }
 
+void openKnowledgeBase(char* pFileName) {
+    gKb = new KnowledgeBase(pFileName);
+    char wndTitle[256];
+    sprintf(wndTitle, "%s", gKb->getTitle());
+    char wndId[] = "kbWnd";
+    gKbWnd = gPsGuiMan->createWindow(wndId, wndTitle, -2, -2, true);
+    gPsGuiMan->listenKeyboard(gKbWnd);
+}
+
 /* Handles File Manager errors. */
 
 void IKnowledgesFileManager::onError(int cmdId, int errorCode) {
-    char errorStr[255];
-    sprintf(errorStr, "%s - Oops! Error code: %d", gFileMan->getCurrentPath(), errorCode);
-    gPsGuiMan->drawText(gFileManWnd, errorStr, 2, 2);
+    if(cmdId == 0) {
+        char msgTitle[] = "Error";
+        char msgText[] = "Cannot open this directory!";
+        MessageBox* pMsgBox = new MessageBox(msgTitle, msgText, 4);
+        gPsGuiMan->listenKeyboard((ExtWindowCtrl*)pMsgBox);
+        ((ExtWindowCtrl*)pMsgBox)->freeWnd();
+        gFileManWnd->redraw();
+        gPsGuiMan->listenKeyboard(gFileManWnd);
+    }
 }
 
 /* Handles File Manager successed responses. */
@@ -153,21 +173,26 @@ void IKnowledgesPseudoGUIManager::onKeyPressed(char k, ExtWindowCtrl* pExtWnd) {
                         gFileMan->readDir(fname);
                         gPsGuiMan->listenKeyboard(pExtWnd);
                     } else {
-                        char msgText[] = "I choosed this file!";
-                        MessageBox* pMsgBox = new MessageBox(msgText, fname);
-                        gPsGuiMan->listenKeyboard((ExtWindowCtrl*)pMsgBox);
+                        if(ExtString::strendq(fname, ".json")) {
+                            char msgTitle[] = "Opening file";
+                            MessageBox* pMsgBox = new MessageBox(msgTitle, fname, 5);
+                            ((ExtWindowCtrl*)pMsgBox)->freeWnd();
+                            gFileManWnd->redraw();
+                            openKnowledgeBase(fname);
+                        }
                     }
                 #else
                     if(ent->d_type == 4) { // if it's directory
                         gFileMan->readDir(fname);
                         gPsGuiMan->listenKeyboard(pExtWnd);
                     } else {
-                        char msgText[] = "I choosed this file!";
-                        MessageBox* pMsgBox = new MessageBox(msgText, fname);
-                        gPsGuiMan->listenKeyboard((ExtWindowCtrl*)pMsgBox);
-                        ((ExtWindowCtrl*)pMsgBox)->freeWnd();
-                        gFileManWnd->redraw();
-                        gPsGuiMan->listenKeyboard(gFileManWnd);
+                        if(ExtString::strendq(fname, ".json")) {
+                            char msgTitle[] = "Opening file";
+                            MessageBox* pMsgBox = new MessageBox(msgTitle, fname, 5);
+                            ((ExtWindowCtrl*)pMsgBox)->freeWnd();
+                            gFileManWnd->redraw();
+                            openKnowledgeBase(fname);
+                        }
                     }
                 #endif
                 if (k == 'q') {

@@ -1,4 +1,5 @@
 #include "pguiman.h"
+#include <curses.h>
 #include <locale.h>
 
 char key;
@@ -23,15 +24,14 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
 
         init_color(COLOR_BLUE, 184, 142, 12);  //  <-- create RGB value for COLOR_BLUE variable
         init_pair(1, COLOR_WHITE, COLOR_BLUE);
-
         init_color(COLOR_GRAY, 150, 150, 150);  //  <-- create RGB value for COLOR_GRAY variable
         init_pair(2, COLOR_WHITE, COLOR_GRAY);
-
         init_color(COLOR_DEEP_BLACK, 0, 0, 0);  //  <-- create RGB value for COLOR_DEEP_BLACK variable
         init_pair(3, COLOR_WHITE, COLOR_DEEP_BLACK);
-
-        init_color(COLOR_RED, 192, 0, 0);  //  <-- create RGB value for COLOR_BLUE variable
+        init_color(COLOR_RED, 192, 0, 0);  //  <-- create RGB value for COLOR_RED variable
         init_pair(4, COLOR_WHITE, COLOR_RED);
+        init_color(COLOR_DARK_GREEN, 0, 88, 0);  //  <-- create RGB value for COLOR_GREEN variable
+        init_pair(5, COLOR_WHITE, COLOR_DARK_GREEN);
     }
 
     bkgd(COLOR_PAIR(3));
@@ -113,33 +113,40 @@ ExtWindowCtrl* PseudoGUIManager::createWindow(char* id, char* title, int width, 
      * WINDOW* wnd = newwin(height, width,  y , x ) <-- creates new window inside console screen
      */
 
+    int realWidth = 12;
+    int realHeight = 12;
+
     if(alignCenter) {
         if(width > gActiveWidth) {
-            width = gActiveWidth - 6;
+            realWidth = gActiveWidth - 6;
         } else if(width <= 0) {
-            width = gActiveWidth + width;
+            realWidth = gActiveWidth + width;
+        } else {
+            realWidth = width;
         }
 
         if(height > gActiveHeight) {
-            height = gActiveHeight - 6;
+            realHeight = gActiveHeight - 6;
         } else if (height <= 0){
-            height = gActiveHeight + height - 1;
+            realHeight = gActiveHeight + height - 1;
+        } else {
+            realHeight = height;
         }
 
-        pExtWnd->hWnd = newwin(height, width, ((gActiveHeight - height) / 2) + 1, (gActiveWidth - width) / 2);
+        pExtWnd->hWnd = newwin(realHeight, realWidth, ((gActiveHeight - realHeight) / 2) + 1, (gActiveWidth - realWidth) / 2);
     } else {
-        pExtWnd->hWnd = newwin(height, width, 1, 0);
+        pExtWnd->hWnd = newwin(realHeight, realWidth, 1, 0);
     }
 
     sprintf(pExtWnd->hTitle, "%s", title);      // <-- store window text in ExtWindow object
 
-    pExtWnd->hWidth = width;
-    pExtWnd->hHeight = height;
+    pExtWnd->hWidth = realWidth;
+    pExtWnd->hHeight = realHeight;
 
     box(pExtWnd->hWnd, 0, 0);                   // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         pExtWnd->hWnd,
-        0, (width - strlen(pExtWnd->hTitle)) / 2,
+        0, (realWidth - strlen(pExtWnd->hTitle)) / 1.5,
         "\u2524 %s \u251c", pExtWnd->hTitle
     );
 
@@ -156,7 +163,7 @@ void PseudoGUIManager::clearWindow(ExtWindowCtrl* pExtWnd) {
     box(pExtWnd->hWnd, 0, 0);                   // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         pExtWnd->hWnd,
-        0, (pExtWnd->hWidth - strlen(pExtWnd->hTitle)) / 2,
+        0, (pExtWnd->hWidth - strlen(pExtWnd->hTitle)) / 1.5,
         "\u2524 %s \u251c", pExtWnd->hTitle
     );
     wrefresh(pExtWnd->hWnd);

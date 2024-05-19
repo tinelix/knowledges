@@ -12,6 +12,7 @@
 class MessageBox : ExtWindowCtrl {
     public:
         MessageBox(char *pWndTitle, char *pMsgText);
+        MessageBox(char *pWndTitle, char *pMsgText, int pBgColor);
         ~MessageBox();
         void free();
     private:
