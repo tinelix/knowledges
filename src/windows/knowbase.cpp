@@ -1,4 +1,5 @@
 #include "knowbase.h"
+#include <cstdio>
 #include <curses.h>
 
 KnowledgeBaseWnd::KnowledgeBaseWnd(struct KnowledgeBase* pKb) {
@@ -22,7 +23,7 @@ KnowledgeBaseWnd::KnowledgeBaseWnd(struct KnowledgeBase* pKb) {
     box(hWnd, 0, 0);                            // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         hWnd,
-        0, (hWidth - strlen(hTitle) - 4) / 2,
+        0, (gActiveWidth - wcslen((wchar_t*)hTitle)) / 2.5,
         "\u2524 %s \u251c", hTitle
     );
 
@@ -68,10 +69,10 @@ void KnowledgeBaseWnd::readKnowledgeBase() {
 
     ListBoxCtrl* categoriesListBox = new ListBoxCtrl(categoriesWnd, categoriesSize);
 
-    categoriesListBox->hY = 2;
+    categoriesListBox->hY = 4;
     categoriesListBox->hX = 2;
-    categoriesListBox->hWidth = categoriesWnd->hWidth - 2;
-    categoriesListBox->hHeight = categoriesWnd->hHeight - 2;
+    categoriesListBox->hWidth = categoriesWnd->hWidth - 4;
+    categoriesListBox->hHeight = categoriesWnd->hHeight - 4;
 
     categoriesListBox->setSelectionIndex(0);
 
@@ -91,8 +92,9 @@ void KnowledgeBaseWnd::readKnowledgeBase() {
 
 void KnowledgeBaseWnd::onKeyPressed(char k) {
     ExtWindowCtrl* categoriesWnd = hChildWnds[0];
+    ((ListBoxCtrl*) categoriesWnd->hCtrls[0])->onKeyPressed(k);
     if(k != 'q') {
-        wgetch(categoriesWnd->hWnd);
+        k = wgetch(categoriesWnd->hWnd);
         onKeyPressed(k);
     }
 }

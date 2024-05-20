@@ -12,7 +12,7 @@
 #endif
 
 struct ListItem {
-    char title[128];
+    char title[384];
     void* ptr;
 };
 
@@ -35,7 +35,6 @@ class ListBoxCtrl : UIControl {
         int getVirtualSelectionIndex();
         ExtWindowCtrl* gParent;
         int gSelectionIndex, gPageNumber, gItemCount;
-
 };
 
 #endif

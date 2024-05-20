@@ -32,8 +32,23 @@ void ListBoxCtrl::recreate(int pItemCount) {
 void ListBoxCtrl::addListItem(int index, ListItem* item) {
     if(item == NULL) return;
     gListItems[index] = item;
+
+    char shortestTitle[128];
+
+    sprintf(shortestTitle, "%s", item->title);
+    if(strlen(item->title) > hWidth - 2) {
+        ExtString::strcut(shortestTitle, hWidth + 16, -1);
+    }
     if(index <= hHeight)  {
-        mvwprintw(gParent->hWnd, (index % (hHeight + 1)) + hY, 4, "%s", item->title);
+        mvwprintw(gParent->hWnd, (index % (hHeight + 1)) + hY, hX + 2, "%s", shortestTitle);
+    }
+
+    if(index == 0) {
+        drawListPointer(
+            hX,
+            hY,
+            true
+        );
     }
 }
 
@@ -62,6 +77,7 @@ int ListBoxCtrl::getVirtualSelectionIndex() {
         return gSelectionIndex;
     else
         return 0;
+
 }
 
 int ListBoxCtrl::getItemCount() {

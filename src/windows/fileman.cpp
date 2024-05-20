@@ -1,5 +1,4 @@
 #include "fileman.h"
-#include <curses.h>
 
 #define MAX_FILENAME_LENGTH 32
 
@@ -42,6 +41,12 @@ char* FileManagerWnd::getSelectedFileName() {
 }
 
 void FileManagerWnd::onKeyPressed(char k) {
+
+    if(k == 'q') {
+        disableListening = false;
+        return;
+    }
+
     ListBoxCtrl* mFileListBox = ((ListBoxCtrl*)hCtrls[0]);
     char fname[255];
     dirent* ent = gFileMan->getFile(
@@ -82,6 +87,7 @@ void FileManagerWnd::onKeyPressed(char k) {
     } else {
         mFileListBox->onKeyPressed(k);
     }
+
     if(!disableListening) {
         k = wgetch(hWnd);
         onKeyPressed(k);

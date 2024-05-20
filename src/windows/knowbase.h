@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include <wchar.h>
 
 #include "../controls/uictrl.h"
 #include "../controls/extwnd.h"
