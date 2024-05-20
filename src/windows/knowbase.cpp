@@ -67,12 +67,12 @@ void KnowledgeBaseWnd::readKnowledgeBase() {
 
     ExtWindowCtrl* categoriesWnd = hChildWnds[0];
 
-    ListBoxCtrl* categoriesListBox = new ListBoxCtrl(categoriesWnd, categoriesSize);
+    ListBoxCtrl* categoriesListBox = new ListBoxCtrl(categoriesWnd, categoriesSize, false);
 
-    categoriesListBox->hY = 4;
+    categoriesListBox->hY = 2;
     categoriesListBox->hX = 2;
     categoriesListBox->hWidth = categoriesWnd->hWidth - 4;
-    categoriesListBox->hHeight = categoriesWnd->hHeight - 4;
+    categoriesListBox->hHeight = categoriesWnd->hHeight - 2;
 
     categoriesListBox->setSelectionIndex(0);
 

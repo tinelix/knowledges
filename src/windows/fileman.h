@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <dirent.h>
+#include <wchar.h>
 
 #ifdef __MINGW64__
     #include <nstddef.h>

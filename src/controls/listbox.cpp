@@ -2,13 +2,14 @@
 #include <cstring>
 #include <curses.h>
 
-ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount) {
+ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos) {
     gParent = pParent;
     gListItems = (ListItem**) malloc(pItemCount * sizeof(ListItem));
     gSelectionIndex = 0;
     hType = 1;
     gPageNumber = 0;
     gItemCount = pItemCount;
+    gTrackPos = pTrackPos;
 }
 
 ListBoxCtrl::~ListBoxCtrl() {
@@ -64,15 +65,17 @@ void ListBoxCtrl::setSelectionIndex(int index) {
 }
 
 int ListBoxCtrl::getVirtualSelectionIndex() {
-    char selection_label[80];
-    sprintf(
-        selection_label, "%d / %d",
-        (gPageNumber * hHeight) + gSelectionIndex + 1, gItemCount
-    );
-    mvwprintw(
-        gParent->hWnd, 2, gParent->hWidth - strlen(selection_label) - 5,
-        "   %s", selection_label
-    );
+    if(gTrackPos) {
+        char selection_label[80];
+        sprintf(
+            selection_label, "%d / %d",
+            (gPageNumber * hHeight) + gSelectionIndex + 1, gItemCount
+        );
+        mvwprintw(
+            gParent->hWnd, 2, gParent->hWidth - strlen(selection_label) - 5,
+            "   %s", selection_label
+        );
+    }
     if(gSelectionIndex > 0)
         return gSelectionIndex;
     else
@@ -99,7 +102,6 @@ void ListBoxCtrl::goToPage(int pPageNumb) {
             mvwaddch(gParent->hWnd, y, x, ' ');
         }
     }
-
 
     for(int y = 0; y <= hHeight; y++) {
         ListItem* item = gListItems[(pPageNumb * hHeight) + y];

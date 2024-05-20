@@ -18,7 +18,7 @@ struct ListItem {
 
 class ListBoxCtrl : UIControl {
     public:
-        ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount);
+        ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos);
         ~ListBoxCtrl();
         void addListItem(int index, ListItem* item);
         int getSelectionIndex();
@@ -32,6 +32,7 @@ class ListBoxCtrl : UIControl {
         int hX, hY, hWidth, hHeight;
         struct ListItem**   gListItems;
     protected:
+        bool gTrackPos;
         int getVirtualSelectionIndex();
         ExtWindowCtrl* gParent;
         int gSelectionIndex, gPageNumber, gItemCount;

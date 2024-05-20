@@ -25,7 +25,7 @@ FileManagerWnd::FileManagerWnd(FileManager *pFileMan, IFileManager *pInterface) 
     box(hWnd, 0, 0);                            // <-- draw window borders
     mvwprintw(                                  // <-- draw window text in top border area
         hWnd,
-        0, (hWidth - strlen(hTitle) - 4) / 2,
+        0, (gActiveWidth - wcslen((wchar_t*)hTitle)) / 2.5,
         "\u2524 %s \u251c", hTitle
     );
 
@@ -97,7 +97,7 @@ void FileManagerWnd::onKeyPressed(char k) {
 void FileManagerWnd::onDirectoryRead(dirent** ents) {
     ListBoxCtrl *mFileListBox;
     if(!hCtrls[0]) {
-        mFileListBox = new ListBoxCtrl(this, gFileMan->getFilesCount());
+        mFileListBox = new ListBoxCtrl(this, gFileMan->getFilesCount(), true);
         mFileListBox->setSelectionIndex(0);
         mFileListBox->hY = 4;
         mFileListBox->hX = 2;
