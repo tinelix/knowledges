@@ -4,6 +4,7 @@
 #include "extwnd.h"
 #include "uictrl.h"
 #include "../utils/extstr.h"
+#include <cstring>
 
 #ifdef __MINGW64__
     #include <ncurses/ncurses.h>
@@ -14,6 +15,7 @@
 struct ListItem {
     char title[384];
     void* ptr;
+    struct ListItem** subItems;
 };
 
 class ListBoxCtrl : UIControl {
@@ -27,11 +29,12 @@ class ListBoxCtrl : UIControl {
         void drawListPointer(int x, int y, bool isVisible);
         void goToPage(int pPageNumber);
         void recreate(int pItemCount);
+        struct ListItem** getItems();
         int getPageNumber();
         int getItemCount();
         int hX, hY, hWidth, hHeight;
-        struct ListItem**   gListItems;
     protected:
+        struct ListItem**   gListItems;
         bool gTrackPos;
         int getVirtualSelectionIndex();
         ExtWindowCtrl* gParent;

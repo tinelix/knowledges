@@ -1,6 +1,4 @@
 #include "listbox.h"
-#include <cstring>
-#include <curses.h>
 
 ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos) {
     gParent = pParent;
@@ -13,6 +11,9 @@ ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos)
 }
 
 ListBoxCtrl::~ListBoxCtrl() {
+    for(int i = 0; i < gItemCount; i++) {
+        free(gListItems[i]->subItems);
+    }
     free(gListItems);
 }
 
@@ -32,6 +33,9 @@ void ListBoxCtrl::recreate(int pItemCount) {
 
 void ListBoxCtrl::addListItem(int index, ListItem* item) {
     if(item == NULL) return;
+
+    item->subItems = (ListItem**) malloc(40 * sizeof(ListItem));
+
     gListItems[index] = item;
 
     char shortestTitle[128];
@@ -81,6 +85,10 @@ int ListBoxCtrl::getVirtualSelectionIndex() {
     else
         return 0;
 
+}
+
+struct ListItem** ListBoxCtrl::getItems() {
+    return gListItems;
 }
 
 int ListBoxCtrl::getItemCount() {
