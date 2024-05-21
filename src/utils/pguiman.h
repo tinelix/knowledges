@@ -12,6 +12,7 @@
 #include <string.h>
 #include "../interfaces/pguiman.h"
 #include "../controls/extwnd.h"
+#include <locale.h>
 
 #define COLOR_GRAY 242
 #define COLOR_DARK_GREEN 28

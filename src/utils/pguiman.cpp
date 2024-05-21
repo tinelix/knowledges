@@ -1,6 +1,4 @@
 #include "pguiman.h"
-#include <curses.h>
-#include <locale.h>
 
 char key;
 
@@ -87,19 +85,15 @@ void PseudoGUIManager::drawText(ExtWindowCtrl *pExtWnd, char* text, int x, int y
         return;
 
     move(y, 0);
-    wclrtoeol(pExtWnd->hWnd);                   // <-- clearing line (including window vetical borders)
-    mvwprintw(pExtWnd->hWnd, y, x, "%s", text); // <-- overwrite line
+    wclrtoeol(pExtWnd->hWnd);
+    mvwprintw(pExtWnd->hWnd, y, x, "%s", text);
 
-    box(pExtWnd->hWnd, 0, 0);                   // <-- draw window borders
-    mvwprintw(                                  // <-- draw window text in top border area
+    box(pExtWnd->hWnd, 0, 0);
+    mvwprintw(
         pExtWnd->hWnd,
         0, (pExtWnd->hWidth - strlen(pExtWnd->hTitle) - 4) / 2,
         "\u2524 %s \u251c", pExtWnd->hTitle
     );
-
-    /*           WINDOW*
-     * wrefresh( window ) <-- updates the contents of the window for display
-     */
 
     wrefresh(pExtWnd->hWnd);
 }

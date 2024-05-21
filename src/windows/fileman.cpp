@@ -59,14 +59,15 @@ void FileManagerWnd::onKeyPressed(char k) {
             stat(fname, &s);
             if (s.st_mode & S_IFDIR) {
                 gFileMan->readDir(fname);
-                gPsGuiMan->listenKeyboard(pExtWnd);
             } else {
                 if(ExtString::strendq(fname, ".json")) {
                     char msgTitle[] = "Opening file";
                     MessageBox* pMsgBox = new MessageBox(msgTitle, fname, 5);
                     ((ExtWindowCtrl*)pMsgBox)->freeWnd();
                     redraw();
-                    openKnowledgeBase(fname);
+                    gSelectedFileName = fname;
+                    disableListening = true;
+                    gInterface->onResult(1, 0);
                 }
             }
         #else

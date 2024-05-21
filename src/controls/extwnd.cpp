@@ -1,5 +1,4 @@
 #include "extwnd.h"
-#include <curses.h>
 
 ExtWindowCtrl::ExtWindowCtrl() {
     hWidth = 8;
@@ -34,10 +33,6 @@ void ExtWindowCtrl::addChildWindow(char* id, char* title, int width, int height,
 
     ExtWindowCtrl *pExtWnd = new ExtWindowCtrl(id);
 
-    /*                       int     int   int int
-     * WINDOW* wnd = newwin(height, width,  y , x ) <-- creates new window inside console screen
-     */
-
     int realWidth = 5;
     int realHeight = 5;
 
@@ -70,9 +65,7 @@ void ExtWindowCtrl::addChildWindow(char* id, char* title, int width, int height,
     );
 
     wbkgd(pExtWnd->hWnd, COLOR_PAIR(2));
-
     keypad(pExtWnd->hWnd, true);
-
     wrefresh(pExtWnd->hWnd);
 
     hChildWnds[gChildWndsSize] = pExtWnd;

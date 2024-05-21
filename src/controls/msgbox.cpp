@@ -1,5 +1,4 @@
 #include "msgbox.h"
-#include <curses.h>
 
 MessageBox::MessageBox(char *pWndTitle, char *pMsgText) {
     sprintf(id, "msgBoxWnd");
@@ -13,7 +12,9 @@ MessageBox::MessageBox(char *pWndTitle, char *pMsgText) {
 
     getmaxyx(stdscr, gActiveHeight, gActiveWidth);
 
-    hWnd = newwin(hHeight, hWidth, ((gActiveHeight - hHeight) / 2) + 1, (gActiveWidth - hWidth) / 2);
+    hWnd = newwin(hHeight, hWidth,
+                  ((gActiveHeight - hHeight) / 2) + 1,
+                  (gActiveWidth - hWidth) / 2);
 
     keypad(hWnd, true);
 

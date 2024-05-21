@@ -26,8 +26,9 @@ class KnowledgeBase {
         KnowledgeBase(char* pFileName);
         ~KnowledgeBase();
         struct KBCategory**     getCategories();
-        // struct KBArticle*       getArticle(int pId);
+        struct KBArticle**      getArticles(int pCategoryIndex);
         int                     getCategoriesCount();
+        int                     getArticlesCount(int pCategoryIndex);
         char*                   getTitle();
         int                     getState();
         char*                   getErrorMessageText();

@@ -3,7 +3,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ncurses.h>
+#ifdef __MINGW64__
+    #include <ncurses/ncurses.h>
+#else
+    #include <ncurses.h>
+#endif
 #include <dirent.h>
 #include <wchar.h>
 

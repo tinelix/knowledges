@@ -1,8 +1,10 @@
 # Compiler (GCC by default)
 CC=gcc
 
-ifeq ($(OSTYPE), "msys")
-	CC		= mingw-w64-x86_64-gcc
+$(info    VAR is [$(OS)])
+
+ifeq ($(OS),Windows_NT)
+	CC		= g++
 endif
 
 CC_FLAGS		= -g -std=c++98 -Wall -Wl,-O1 -pipe -O2 -flto=2 \
@@ -20,13 +22,21 @@ EXT_INCLUDES 	       += -I./libs/jsoncpp/include
 POSTLIBS		= -lncursesw $(EXT_INCLUDES) -lstdc++
 
 # Source codes
-SOURCES=$(SRC_DIR)/*.cpp $(SRC_DIR)/utils/*.cpp $(SRC_DIR)/windows/*.cpp $(SRC_DIR)/controls/*.cpp $(LIBS_DIR)/jsoncpp/src/lib_json/*.cpp
+SOURCES			= $(SRC_DIR)/*.cpp $(SRC_DIR)/utils/*.cpp \
+			  $(SRC_DIR)/windows/*.cpp $(SRC_DIR)/controls/*.cpp \
+			  $(LIBS_DIR)/jsoncpp/src/lib_json/*.cpp
 OUT_FILE=$(OUT_DIR)/knowledges
-SA_OUT_FILE=$(OUT_DIR)/knowledges.o
 
-ifeq ($(OSTYPE), "msys")
-	LIBS	= -static -static-libgcc -static-libstdc++ -lncursesw $(EXT_INCLUDES)
-	OUT_FILE= $(OUT_DIR)/knowledges.exe
+# Static libraries linking
+SA_CC_FLAGS 		= -g -std=c++98 -Wall -static
+SA_LIBS			= $(EXT_INCLUDES) -L./out
+SA_JCPP_FILE		= $(OUT_DIR)/jsoncpp.o
+SA_JCPP_ARCH_FILE	= $(OUT_DIR)/jsoncpp.a
+SA_POSTLIBS		= -lncursesw $(EXT_INCLUDES) -ltinfo -lstdc++
+
+ifeq ($(OS),Windows_NT)
+	SA_CC_FLAGS = -g -std=c++98 -Wall
+	SA_POSTLIBS = -lncursesw $(EXT_INCLUDES) -I/mingw64/include/ncurses -static -DNCURSES_STATIC
 endif
 
 # Clean files function
@@ -37,10 +47,8 @@ build: $(SOURCE)
 	$(CC) $(CC_FLAGS) $(LIBS) $(SOURCES) -o $(OUT_FILE) $(POSTLIBS)
 
 standalone:
-	$(CC) $(SA_CC_FLAGS) $(LIBS) $(SOURCES) -o $(SA_OUT_FILE)
-	$(CC) -o $(OUT_FILE) $(SA_OUT_FILE)
+	mkdir -p ./out/libs
+	$(CC) $(SA_CC_FLAGS) $(LIBS) $(SOURCES) -o $(OUT_FILE) $(SA_POSTLIBS)
 
 clean:
 	$(DEL_FILE) out/*
-
-

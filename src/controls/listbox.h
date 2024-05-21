@@ -5,6 +5,7 @@
 #include "uictrl.h"
 #include "../utils/extstr.h"
 #include <cstring>
+#include <cstdio>
 
 #ifdef __MINGW64__
     #include <ncurses/ncurses.h>
@@ -16,6 +17,9 @@ struct ListItem {
     char title[384];
     void* ptr;
     struct ListItem** subItems;
+    int subItemsCount;
+    bool expanded;
+    bool subItem;
 };
 
 class ListBoxCtrl : UIControl {
@@ -27,12 +31,16 @@ class ListBoxCtrl : UIControl {
         void setSelectionIndex(int index);
         void onKeyPressed(char k);
         void drawListPointer(int x, int y, bool isVisible);
+        void drawListPointer(int x, int y, char p, bool isVisible);
         void goToPage(int pPageNumber);
         void recreate(int pItemCount);
+        void expand(int pIndex, bool status);
         struct ListItem** getItems();
         int getPageNumber();
-        int getItemCount();
-        int hX, hY, hWidth, hHeight;
+        int getItemsCount();
+        int getSubItemsCount(int pIndex);
+        int hX, hY, hWidth, hHeight, hExpandedItemIndex, hSubItemCount;
+        bool expanded;
     protected:
         struct ListItem**   gListItems;
         bool gTrackPos;

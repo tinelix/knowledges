@@ -3,7 +3,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ncurses.h>
+#ifdef __MINGW64__
+    #include <ncurses/ncurses.h>
+#else
+    #include <ncurses.h>
+#endif
+#include <cstdio>
 #include <wchar.h>
 
 #include "../controls/uictrl.h"

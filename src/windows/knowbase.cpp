@@ -1,6 +1,4 @@
 #include "knowbase.h"
-#include <cstdio>
-#include <curses.h>
 
 KnowledgeBaseWnd::KnowledgeBaseWnd(struct KnowledgeBase* pKb) {
 
@@ -72,13 +70,20 @@ void KnowledgeBaseWnd::readKnowledgeBase() {
     categoriesListBox->hY = 2;
     categoriesListBox->hX = 2;
     categoriesListBox->hWidth = categoriesWnd->hWidth - 4;
-    categoriesListBox->hHeight = categoriesWnd->hHeight - 2;
+    categoriesListBox->hHeight = categoriesWnd->hHeight - 4;
 
     categoriesListBox->setSelectionIndex(0);
 
     for(int i = 0; i < categoriesSize; i++) {
         ListItem* item = new ListItem();
         sprintf(item->title, "%s", gKbCategories[i]->title);
+        item->subItems = (ListItem**) malloc(gKb->getArticlesCount(i) * sizeof(ListItem));
+        KBArticle** articles = gKb->getArticles(i);
+        item->subItemsCount = gKb->getArticlesCount(i);
+        for(int i2 = 0; i2 < gKb->getArticlesCount(i); i2++) {
+            item->subItems[i2] = new ListItem();
+            sprintf(item->subItems[i2]->title, "%s", articles[i2]->title);
+        }
         categoriesListBox->addListItem(i, item);
     }
 
@@ -92,10 +97,59 @@ void KnowledgeBaseWnd::readKnowledgeBase() {
 
 void KnowledgeBaseWnd::onKeyPressed(char k) {
     ExtWindowCtrl* categoriesWnd = hChildWnds[0];
-    ((ListBoxCtrl*) categoriesWnd->hCtrls[0])->onKeyPressed(k);
+    ExtWindowCtrl* articleWnd = hChildWnds[1];
+
+    scrollok(articleWnd->hWnd, TRUE);
+
+    ListBoxCtrl* categoriesListBox = ((ListBoxCtrl*) categoriesWnd->hCtrls[0]);
+    categoriesListBox->onKeyPressed(k);
+
     if(k != 'q') {
+        int xItemIndex = categoriesListBox->hExpandedItemIndex;
+        if(k == (int)10 && categoriesListBox->expanded) {
+            int itemIndex = categoriesListBox->getSelectionIndex();
+            int subItemIndex = itemIndex - xItemIndex - 1;
+
+            ListItem* item = categoriesListBox->getItems()[xItemIndex];
+
+            if(itemIndex > xItemIndex && subItemIndex < item->subItemsCount) {
+                ListItem* childItem = item->subItems[subItemIndex];
+                KBArticle** articles = gKb->getArticles(xItemIndex);
+
+                for(int x = 1; x < articleWnd->hWidth - 1; x++) {
+                    for(int y = 1; y < articleWnd->hHeight - 1; y++) {
+                        mvwaddch(articleWnd->hWnd, y, x, ' ');
+                    }
+                }
+
+                mvwprintw(articleWnd->hWnd, 2, 2, "%s", childItem->title);
+
+                char* articleContent = articles[subItemIndex]->content;
+                char* articleContentWrap;
+
+                int articleLinesCount = ExtString::strlines(
+                    articleContent, ExtString::strcrlfc(articleContent)
+                );
+
+                char** articleLines;
+
+                articleLines = ExtString::strsplitln(articleContent);
+
+                for(int i = 0; i < articleLinesCount; i++) {
+                    mvwprintw(
+                        articleWnd->hWnd, 4 + i, 2,
+                        "%s",
+                        articleLines[i]
+                    );
+                }
+
+                wrefresh(articleWnd->hWnd);
+            }
+        }
         k = wgetch(categoriesWnd->hWnd);
         onKeyPressed(k);
+    } else {
+
     }
 }
 
