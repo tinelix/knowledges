@@ -20,15 +20,15 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
     if(has_colors()) {
         start_color();
 
-        init_color(COLOR_BLUE, 184, 142, 12);  //  <-- create RGB value for COLOR_BLUE variable
+        init_color(COLOR_BLUE, 0, 0, 4096);  //  <-- create RGB value for COLOR_BLUE variable
         init_pair(1, COLOR_WHITE, COLOR_BLUE);
-        init_color(COLOR_GRAY, 150, 150, 150);  //  <-- create RGB value for COLOR_GRAY variable
+        init_color(COLOR_GRAY, 256, 256, 256);  //  <-- create RGB value for COLOR_GRAY variable
         init_pair(2, COLOR_WHITE, COLOR_GRAY);
         init_color(COLOR_DEEP_BLACK, 0, 0, 0);  //  <-- create RGB value for COLOR_DEEP_BLACK variable
         init_pair(3, COLOR_WHITE, COLOR_DEEP_BLACK);
-        init_color(COLOR_RED, 192, 0, 0);  //  <-- create RGB value for COLOR_RED variable
+        init_color(COLOR_RED, 1024, 0, 0);  //  <-- create RGB value for COLOR_RED variable
         init_pair(4, COLOR_WHITE, COLOR_RED);
-        init_color(COLOR_DARK_GREEN, 0, 88, 0);  //  <-- create RGB value for COLOR_GREEN variable
+        init_color(COLOR_DARK_GREEN, 0, 576, 0);  //  <-- create RGB value for COLOR_GREEN variable
         init_pair(5, COLOR_WHITE, COLOR_DARK_GREEN);
     }
 
