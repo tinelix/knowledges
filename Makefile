@@ -1,8 +1,6 @@
 # Compiler (GCC by default)
 CC=gcc
 
-$(info    VAR is [$(OS)])
-
 ifeq ($(OS),Windows_NT)
 	CC		= g++
 endif
@@ -35,7 +33,7 @@ SA_JCPP_ARCH_FILE	= $(OUT_DIR)/jsoncpp.a
 SA_POSTLIBS		= -lncursesw $(EXT_INCLUDES) -ltinfo -lstdc++
 
 ifeq ($(OS),Windows_NT)
-	SA_CC_FLAGS = -g -std=c++98 -Wall
+	SA_CC_FLAGS =  -g -std=c++98 -Wall -s
 	SA_POSTLIBS = -lncursesw $(EXT_INCLUDES) -I/mingw64/include/ncurses -static -DNCURSES_STATIC
 endif
 
@@ -47,8 +45,12 @@ build: $(SOURCE)
 	$(CC) $(CC_FLAGS) $(LIBS) $(SOURCES) -o $(OUT_FILE) $(POSTLIBS)
 
 standalone:
-	mkdir -p ./out/libs
 	$(CC) $(SA_CC_FLAGS) $(LIBS) $(SOURCES) -o $(OUT_FILE) $(SA_POSTLIBS)
+
+sa_cygwin:
+	g++ -g -std=c++98 -Wall -s $(LIBS) $(SOURCES) -o $(OUT_FILE).exe \
+	-lncursesw $(EXT_INCLUDES) -I/mingw64/include/ncurses -static -DNCURSES_STATIC \
+	-D__CYGWIN_MINGW64__
 
 clean:
 	$(DEL_FILE) out/*
