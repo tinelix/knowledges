@@ -2,7 +2,7 @@
 CC=gcc
 
 ifeq ($(OS),Windows_NT)
-	CC		= g++
+	CC		= gcc
 endif
 
 CC_FLAGS		= -g -std=c++98 -Wall -Wl,-O1 -pipe -O2 -flto=2 \
@@ -34,7 +34,7 @@ SA_POSTLIBS		= -lncursesw $(EXT_INCLUDES) -ltinfo -lstdc++
 
 ifeq ($(OS),Windows_NT)
 	SA_CC_FLAGS =  -g -std=c++98 -Wall -s
-	SA_POSTLIBS = -lncursesw $(EXT_INCLUDES) -I/mingw64/include/ncurses -static -DNCURSES_STATIC
+	SA_POSTLIBS = -lncursesw -lstdc++ $(EXT_INCLUDES) -I/mingw64/include/ncurses -static -DNCURSES_STATIC
 endif
 
 # Clean files function

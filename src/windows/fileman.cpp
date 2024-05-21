@@ -97,7 +97,7 @@ void FileManagerWnd::onKeyPressed(char k) {
 
 void FileManagerWnd::onDirectoryRead(dirent** ents) {
     ListBoxCtrl *mFileListBox;
-    if(!hCtrls[0]) {
+    if(hCtrls[0] != NULL) {
         mFileListBox = new ListBoxCtrl(this, gFileMan->getFilesCount(), true);
         mFileListBox->setSelectionIndex(0);
         mFileListBox->hY = 4;
