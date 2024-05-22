@@ -97,8 +97,8 @@ void FileManagerWnd::onKeyPressed(char k) {
 
 void FileManagerWnd::onDirectoryRead(dirent** ents) {
     ListBoxCtrl *mFileListBox;
-    #ifdef __MINGW64__
-        if(hCtrls[0] != NULL) {
+    #ifndef __MINGW64__
+        if(hCtrls[0] == NULL) {
     #endif
             mFileListBox = new ListBoxCtrl(this, gFileMan->getFilesCount(), true);
             mFileListBox->setSelectionIndex(0);
@@ -106,7 +106,7 @@ void FileManagerWnd::onDirectoryRead(dirent** ents) {
             mFileListBox->hX = 2;
             mFileListBox->hHeight = hHeight - 6;
             mFileListBox->hWidth = hWidth - 4;
-    #ifdef __MINGW64__
+    #ifndef __MINGW64__
             addControl((UIControl*)mFileListBox);
         } else {
             mFileListBox = ((ListBoxCtrl*) hCtrls[0]);
