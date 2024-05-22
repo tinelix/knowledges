@@ -34,7 +34,8 @@ SA_POSTLIBS		= -lncursesw $(EXT_INCLUDES) -ltinfo -lstdc++
 
 ifeq ($(OS),Windows_NT)
 	SA_CC_FLAGS =  -g -std=c++98 -Wall -s
-	SA_POSTLIBS = -lncursesw -lstdc++ $(EXT_INCLUDES) -I/mingw64/include/ncursesw -static -DNCURSES_STATIC
+	SA_POSTLIBS = -lncursesw -lstdc++ $(EXT_INCLUDES) -I/mingw64/include/ncursesw \
+		      -static -DNCURSES_STATIC -DNCURSES_WIDECHAR=1
 endif
 
 # Clean files function
