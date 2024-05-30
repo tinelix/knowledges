@@ -1,5 +1,8 @@
 #include <cstring>
-#ifdef __MINGW64__
+
+#ifdef __CYGWIN_MINGW64__
+    #include <ncurses.h>
+#elif __MINGW64__
     #include <ncurses/ncurses.h>
 #else
     #include <ncurses.h>

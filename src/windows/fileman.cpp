@@ -97,19 +97,22 @@ void FileManagerWnd::onKeyPressed(char k) {
 
 void FileManagerWnd::onDirectoryRead(dirent** ents) {
     ListBoxCtrl *mFileListBox;
-    if(!hCtrls[0]) {
-        mFileListBox = new ListBoxCtrl(this, gFileMan->getFilesCount(), true);
-        mFileListBox->setSelectionIndex(0);
-        mFileListBox->hY = 4;
-        mFileListBox->hX = 2;
-        mFileListBox->hHeight = hHeight - 6;
-        mFileListBox->hWidth = hWidth - 4;
-
-        addControl((UIControl*)mFileListBox);
-    } else {
-        mFileListBox = ((ListBoxCtrl*) hCtrls[0]);
-        mFileListBox->recreate(gFileMan->getFilesCount());
-    }
+    #ifndef __MINGW64__
+        if(hCtrls[0] == NULL) {
+    #endif
+            mFileListBox = new ListBoxCtrl(this, gFileMan->getFilesCount(), true);
+            mFileListBox->setSelectionIndex(0);
+            mFileListBox->hY = 4;
+            mFileListBox->hX = 2;
+            mFileListBox->hHeight = hHeight - 6;
+            mFileListBox->hWidth = hWidth - 4;
+    #ifndef __MINGW64__
+            addControl((UIControl*)mFileListBox);
+        } else {
+            mFileListBox = ((ListBoxCtrl*) hCtrls[0]);
+            mFileListBox->recreate(gFileMan->getFilesCount());
+        }
+    #endif
 
     for(int i = 0; i < gFileMan->getFilesCount(); i++) {
         ListItem* item = new ListItem();
