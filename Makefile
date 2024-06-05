@@ -19,7 +19,8 @@ TINYDIR_SRC		= $(LIBS_DIR)/tinydir
 
 EXT_INCLUDES		= -I./src \
 			  -I./libs/jsoncpp/include \
-			   -I./$(TINYDIR_SRC)
+			  -I./$(TINYDIR_SRC)
+
 POSTLIBS		= -lncursesw $(EXT_INCLUDES) -lstdc++
 
 # Source codes
@@ -36,9 +37,9 @@ SA_JCPP_ARCH_FILE	= $(OUT_DIR)/jsoncpp.a
 SA_POSTLIBS		= -lncursesw $(EXT_INCLUDES) -ltinfo -lstdc++
 
 ifeq ($(OS),Windows_NT)
-	SA_CC_FLAGS =  -g -std=c++98 -Wall -s
-	SA_POSTLIBS = -lncursesw -lstdc++ $(EXT_INCLUDES) -I/mingw64/include/ncursesw \
-		      -static -DNCURSES_STATIC -DNCURSES_WIDECHAR=1
+	SA_CC_FLAGS 	=  -g -std=c++98 -Wall -s
+	SA_POSTLIBS 	= -lncursesw -lstdc++ $(EXT_INCLUDES) -I/mingw64/include/ncursesw \
+			  -static -DNCURSES_STATIC -DNCURSES_WIDECHAR=1
 endif
 
 # Clean files function
