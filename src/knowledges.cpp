@@ -1,9 +1,9 @@
 #include <cstring>
 
-#ifdef __CYGWIN_MINGW64__
-    #include <ncurses.h>
+#ifdef __PDCURSES__
+    #include <curses.h>
 #elif __MINGW64__
-    #include <ncurses/ncurses.h>
+    #include <ncursesw/ncurses.h>
 #else
     #include <ncurses.h>
 #endif
