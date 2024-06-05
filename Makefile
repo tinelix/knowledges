@@ -2,7 +2,7 @@
 CC=gcc
 
 ifeq ($(OS),Windows_NT)
-	CC		= gcc
+	CC		= g++
 endif
 
 CC_FLAGS		= -g -std=c++98 -Wall -Wl,-O1 -pipe -O2 -flto=2 \
@@ -15,8 +15,11 @@ LIBS_DIR		= libs
 OUT_DIR			= out
 
 # Libraries
-EXT_INCLUDES		= -I./src
-EXT_INCLUDES 	       += -I./libs/jsoncpp/include
+TINYDIR_SRC		= $(LIBS_DIR)/tinydir
+
+EXT_INCLUDES		= -I./src \
+			  -I./libs/jsoncpp/include \
+			   -I./$(TINYDIR_SRC)
 POSTLIBS		= -lncursesw $(EXT_INCLUDES) -lstdc++
 
 # Source codes
