@@ -17,8 +17,8 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef OPENDSS_UTILS_UICTRL_H
-#define OPENDSS_UTILS_UICTRL_H
+#ifndef KNOWLEDGES_UTILS_UICTRL_H
+#define KNOWLEDGES_UTILS_UICTRL_H
 
 class UIControl {
     public:

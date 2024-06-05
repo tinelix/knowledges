@@ -17,8 +17,8 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef OPENDSS_CONTROLS_LISTBOX_H
-#define OPENDSS_CONTROLS_LISTBOX_H
+#ifndef KNOWLEDGES_CONTROLS_LISTBOX_H
+#define KNOWLEDGES_CONTROLS_LISTBOX_H
 
 #include "extwnd.h"
 #include "uictrl.h"
@@ -26,7 +26,9 @@
 #include <cstring>
 #include <cstdio>
 
-#ifdef __MINGW64__
+#ifdef __PDCURSES__
+    #include <curses.h>
+#elif __MINGW64__
     #include <ncurses/ncurses.h>
 #else
     #include <ncurses.h>

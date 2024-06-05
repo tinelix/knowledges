@@ -17,8 +17,8 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef OPENDSS_UTILS_PGUIMAN_H
-#define OPENDSS_UTILS_PGUIMAN_H
+#ifndef KNOWLEDGES_UTILS_PGUIMAN_H
+#define KNOWLEDGES_UTILS_PGUIMAN_H
 
 #ifdef __MINGW64__
     #include <ncurses/ncurses.h>

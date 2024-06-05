@@ -17,12 +17,15 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef OPENDSS_CONTROLS_MSGBOX_H
-#define OPENDSS_CONTROLS_MSGBOX_H
+#ifndef KNOWLEDGES_CONTROLS_MSGBOX_H
+#define KNOWLEDGES_CONTROLS_MSGBOX_H
 
 #include "extwnd.h"
 #include "../utils/pguiman.h"
-#ifdef __MINGW64__
+
+#ifdef __PDCURSES__
+    #include <curses.h>
+#elif __MINGW64__
     #include <ncurses/ncurses.h>
 #else
     #include <ncurses.h>

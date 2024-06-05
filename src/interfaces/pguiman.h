@@ -17,8 +17,8 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef OPENDSS_INTERFACES_PGUIMAN_H
-#define OPENDSS_INTERFACES_PGUIMAN_H
+#ifndef KNOWLEDGES_INTERFACES_PGUIMAN_H
+#define KNOWLEDGES_INTERFACES_PGUIMAN_H
 
 #include "../controls/extwnd.h"
 

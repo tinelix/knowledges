@@ -17,8 +17,8 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef OPENDSS_UTILS_FILEMAN_H
-#define OPENDSS_UTILS_FILEMAN_H
+#ifndef KNOWLEDGES_UTILS_FILEMAN_H
+#define KNOWLEDGES_UTILS_FILEMAN_H
 
 #include <tinydir.h>
 #include <unistd.h>
