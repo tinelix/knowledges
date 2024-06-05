@@ -20,8 +20,10 @@
 #ifndef KNOWLEDGES_UTILS_PGUIMAN_H
 #define KNOWLEDGES_UTILS_PGUIMAN_H
 
-#ifdef __MINGW64__
-    #include <ncurses/ncurses.h>
+#ifdef __PDCURSES__
+    #include <curses.h>
+#elif __MINGW64__
+    #include <ncursesw/ncurses.h>
 #else
     #include <ncurses.h>
 #endif

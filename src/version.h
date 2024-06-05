@@ -24,7 +24,7 @@
 
 #include <cstdio>
 
-class OpenDSSVersion {
+class KnowledgesVersion {
     public:
         static char* getVersion() {
             char* version = new char[24];

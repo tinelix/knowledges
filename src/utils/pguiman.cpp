@@ -24,8 +24,12 @@ char key;
 /* Initializes ncurses screen. */
 
 PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *pInterface) {
-    setlocale(LC_ALL, "");                      /* <-- set locale for correct non-ASCII characters
-                                                       displaying */
+    #ifdef __MINGW64__
+        setlocale(LC_ALL."ru_RU");
+    #else
+        setlocale(LC_ALL, "");                      /* <-- set locale for correct non-ASCII characters
+                                                        displaying */
+    #endif
     initscr();                                  /* <-- temporally clearing command prompt and initializes
                                                        empty screen of ncurses */
     keypad(stdscr, true);                       // <-- enables arrow pressed keys handling
@@ -70,8 +74,8 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *pInterface) {
 
 void PseudoGUIManager::showTopVersionInfo() {
 
-    char* verStr = OpenDSSVersion::getVersion();
-    const char* verInfoStr = "Tinelix OpenDSS v. %s | Copyright (C) 2024 Dmitry Tretyakov";
+    char* verStr = KnowledgesVersion::getVersion();
+    const char* verInfoStr = "Tinelix Knowledges v. %s | Copyright (C) 2024 Dmitry Tretyakov";
 
     /*      int int
      * move( y , x )                                                <-- moves cursor
