@@ -140,6 +140,9 @@ void FileManagerWnd::onDirectoryRead(tinydir_file* files) {
 
 void FileManagerWnd::onFileManResult(int cmdId, int resultCode) {
     if(cmdId == 0) {
+        for(int x = 0; x < hHeight; x++) {
+            mvwaddch(hWnd, 2, 2 + x, ' ');
+        }
         clear();
         mvwprintw(hWnd, 2, 2, "%s", gFileMan->getCurrentPath());
     }
