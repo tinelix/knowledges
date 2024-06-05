@@ -24,12 +24,8 @@ char key;
 /* Initializes ncurses screen. */
 
 PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *pInterface) {
-    #ifdef __MINGW64__
-        setlocale(LC_ALL."ru_RU");
-    #else
-        setlocale(LC_ALL, "");                      /* <-- set locale for correct non-ASCII characters
+    setlocale(LC_ALL, "");                      /* <-- set locale for correct non-ASCII characters
                                                         displaying */
-    #endif
     initscr();                                  /* <-- temporally clearing command prompt and initializes
                                                        empty screen of ncurses */
     keypad(stdscr, true);                       // <-- enables arrow pressed keys handling
