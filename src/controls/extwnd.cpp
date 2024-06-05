@@ -1,3 +1,22 @@
+/*  Tinelix Knowledges - encyclopedia in your console
+ *  -------------------------------------------------------------------------------------------
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
+ *
+ *  This file is part of Tinelix Knowledges program.
+ *
+ *  Tinelix Knowledges is free software: you can redistribute it and/or modify it under the
+ *  terms of the GNU Affero General Public License as published by the Free Software Foundation,
+ *  either version 3 of the License, or (at your option) any later version.
+ *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License along with this
+ *  program. If not, see https://www.gnu.org/licenses/.
+ *
+ *  Source code: https://github.com/tinelix/knowledges
+ */
+
 #include "extwnd.h"
 
 ExtWindowCtrl::ExtWindowCtrl() {
@@ -19,6 +38,17 @@ ExtWindowCtrl::ExtWindowCtrl(char* pId) {
     hChildWnds = (ExtWindowCtrl**)malloc(sizeof(ExtWindowCtrl) * 16);
 }
 
+ExtWindowCtrl::ExtWindowCtrl(char* pId, ExtWindowCtrl* pParent) {
+    sprintf(id, "%s", pId);
+    hWidth = 8;
+    hHeight = 8;
+    gCtrlSize = 0;
+    gChildWndsSize = 0;
+    hCtrls = (UIControl**)malloc(sizeof(UIControl) * 255);
+    hChildWnds = (ExtWindowCtrl**)malloc(sizeof(ExtWindowCtrl) * 16);
+    gParent = pParent;
+}
+
 ExtWindowCtrl::~ExtWindowCtrl() {
     free(hCtrls);
     free(hChildWnds);
@@ -29,9 +59,15 @@ void ExtWindowCtrl::addControl(UIControl* pCtrl) {
     gCtrlSize++;
 }
 
+void ExtWindowCtrl::addControl(UIControl* pCtrl, int index) {
+    hCtrls[gCtrlSize] = pCtrl;
+    if(gCtrlSize >= index)
+        gCtrlSize++;
+}
+
 void ExtWindowCtrl::addChildWindow(char* id, char* title, int width, int height, int x, int y) {
 
-    ExtWindowCtrl *pExtWnd = new ExtWindowCtrl(id);
+    ExtWindowCtrl *pExtWnd = new ExtWindowCtrl(id, this);
 
     int realWidth = 5;
     int realHeight = 5;
@@ -65,6 +101,7 @@ void ExtWindowCtrl::addChildWindow(char* id, char* title, int width, int height,
     );
 
     wbkgd(pExtWnd->hWnd, COLOR_PAIR(2));
+
     keypad(pExtWnd->hWnd, true);
     wrefresh(pExtWnd->hWnd);
 
@@ -101,5 +138,17 @@ void ExtWindowCtrl::freeWnd() {
     wrefresh(hWnd);
     delwin(hWnd);
     refresh();
+}
+
+void ExtWindowCtrl::listen(bool value) {
+
+}
+
+void ExtWindowCtrl::onKeyPressed(char k) {
+
+}
+
+void ExtWindowCtrl::onKeyPressed(char k, char prev_key) {
+
 }
 

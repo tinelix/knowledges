@@ -1,3 +1,22 @@
+/*  Tinelix Knowledges - encyclopedia in your console
+ *  -------------------------------------------------------------------------------------------
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
+ *
+ *  This file is part of Tinelix Knowledges program.
+ *
+ *  Tinelix Knowledges is free software: you can redistribute it and/or modify it under the
+ *  terms of the GNU Affero General Public License as published by the Free Software Foundation,
+ *  either version 3 of the License, or (at your option) any later version.
+ *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License along with this
+ *  program. If not, see https://www.gnu.org/licenses/.
+ *
+ *  Source code: https://github.com/tinelix/knowledges
+ */
+
 #include "listbox.h"
 
 ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos) {
@@ -37,6 +56,7 @@ void ListBoxCtrl::addListItem(int index, ListItem* item) {
     if(item == NULL) return;
 
     gListItems[index] = item;
+
 
     char shortestTitle[128];
 
@@ -126,42 +146,42 @@ void ListBoxCtrl::goToPage(int pPageNumb) {
 }
 
 void ListBoxCtrl::onKeyPressed(char k) {
+    int virtIndex = getVirtualSelectionIndex();
     if((int)k == 2 || (int)k == 3) {
-        int index = getVirtualSelectionIndex();
 
         if((int)k == 3) { // top arrow key
-            if(index > 0) {
-                index--;
+            if(virtIndex > 0) {
+                virtIndex--;
             }
-            if(index <= 0 && gPageNumber > 0) {
+            if(virtIndex <= 0 && gPageNumber > 0) {
                 goToPage(gPageNumber - 1);
-                index = hHeight;
+                virtIndex = hHeight;
             }
         } else if((int)k == 2) { // bottom arrow key
             if(gItemCount - 1 > getSelectionIndex()) {
-                index++;
+                virtIndex++;
             }
-            if(index >= hHeight) {
-                index = 0;
-                if(index <= 0) {
+            if(virtIndex >= hHeight) {
+                virtIndex = 0;
+                if(virtIndex <= 0) {
                     goToPage(gPageNumber + 1);
                 }
             }
         }
 
         int list_index = getVirtualSelectionIndex() + hY;
-        if(index >= 0 && index < getItemsCount()) {
+        if(virtIndex >= 0 && virtIndex < getItemsCount()) {
             drawListPointer(
                 hX, list_index,false
             );
         }
 
-        if(index <= getItemsCount() - 1) {
-            gSelectionIndex = index;
+        if(virtIndex <= getItemsCount() - 1) {
+            gSelectionIndex = virtIndex;
             list_index = getVirtualSelectionIndex() + hY;
         }
 
-        if(index < getItemsCount()) {
+        if(virtIndex < getItemsCount()) {
             drawListPointer(
                 hX, list_index, true
             );
@@ -175,6 +195,21 @@ void ListBoxCtrl::onKeyPressed(char k) {
         );
 
         expand(index, k == (int)5);
+    } else if(k == (int)82){
+        if(gPageNumber * hHeight < getItemsCount()) {
+            goToPage(gPageNumber + 1);
+            drawListPointer(
+                hX, hY + virtIndex, '^', k == (int)5
+            );
+        }
+    } else if(k == (int)83) {
+        if(gPageNumber > 0) {
+            goToPage(gPageNumber - 1);
+            drawListPointer(
+                hX, hY + virtIndex, '^', k == (int)5
+            );
+        }
+
     }
 }
 
@@ -191,9 +226,7 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 
     ListItem* parentItem = gListItems[pIndex2];
 
-    if(parentItem == NULL) return;
-
-    int subItemsCount = parentItem->subItemsCount;
+    int subItemsCount = gListItems[pIndex2]->subItemsCount;
 
     if(subItemsCount == 0) return;
 

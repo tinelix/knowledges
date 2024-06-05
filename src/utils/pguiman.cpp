@@ -1,10 +1,29 @@
+/*  Tinelix Knowledges - encyclopedia in your console
+ *  -------------------------------------------------------------------------------------------
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
+ *
+ *  This file is part of Tinelix Knowledges program.
+ *
+ *  Tinelix Knowledges is free software: you can redistribute it and/or modify it under the
+ *  terms of the GNU Affero General Public License as published by the Free Software Foundation,
+ *  either version 3 of the License, or (at your option) any later version.
+ *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License along with this
+ *  program. If not, see https://www.gnu.org/licenses/.
+ *
+ *  Source code: https://github.com/tinelix/knowledges
+ */
+
 #include "pguiman.h"
 
 char key;
 
 /* Initializes ncurses screen. */
 
-PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
+PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *pInterface) {
     setlocale(LC_ALL, "");                      /* <-- set locale for correct non-ASCII characters
                                                        displaying */
     initscr();                                  /* <-- temporally clearing command prompt and initializes
@@ -21,8 +40,8 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
         start_color();
 
         init_color(COLOR_LIGHT_WHITE, 768, 768, 768);
-        init_color(COLOR_BLUE, 0, 142, 768);  //  <-- create RGB value for COLOR_BLUE variable
-        init_pair(1, COLOR_LIGHT_WHITE, COLOR_BLUE);
+        init_color(COLOR_BLUE_SKY, 0, 142, 768);  //  <-- create RGB value for COLOR_BLUE_SKY variable
+        init_pair(1, COLOR_LIGHT_WHITE, COLOR_BLUE_SKY);
         init_color(COLOR_GRAY, 384, 384, 384);  //  <-- create RGB value for COLOR_GRAY variable
         init_pair(2, COLOR_LIGHT_WHITE, COLOR_GRAY);
         init_color(COLOR_DEEP_BLACK, 0, 0, 0);  //  <-- create RGB value for COLOR_DEEP_BLACK variable
@@ -42,7 +61,7 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
 
     bkgd(COLOR_PAIR(3));
 
-    gInterface = interface;
+    gInterface = pInterface;
 
     getmaxyx(stdscr, gActiveHeight, gActiveWidth);
 }
@@ -51,7 +70,8 @@ PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager *interface) {
 
 void PseudoGUIManager::showTopVersionInfo() {
 
-    char verInfoStr[] = "Tinelix Knowledges v. 0.0.1. Copyright (C) 2024 Dmitry Tretyakov\n";
+    char* verStr = OpenDSSVersion::getVersion();
+    const char* verInfoStr = "Tinelix OpenDSS v. %s | Copyright (C) 2024 Dmitry Tretyakov";
 
     /*      int int
      * move( y , x )                                                <-- moves cursor
@@ -67,8 +87,8 @@ void PseudoGUIManager::showTopVersionInfo() {
      *                                                                         argument #0
      */
 
-    move(0, (gActiveWidth - strlen(verInfoStr)) / 2);
-    printw("%s", verInfoStr);
+    move(0, (gActiveWidth - strlen(verInfoStr) - strlen(verStr) + 2) / 2);
+    printw(verInfoStr, verStr);
     mvchgat(0, 0, -1, A_NORMAL, 1, NULL);  // sets the background color for a specific line
 
     refresh();

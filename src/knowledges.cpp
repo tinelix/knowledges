@@ -31,7 +31,7 @@ class IKnowledgesFileManager : IFileManager {
     public:
         void onError(int cmdId, int errorCode);
         void onResult(int cmdId, int resultCode);
-        void onDirectoryRead(dirent** ents);
+        void onDirectoryRead(tinydir_file* files);
 };
 
 IKnowledgesFileManager          *gFileManInterface;
@@ -87,7 +87,7 @@ void IKnowledgesFileManager::onError(int cmdId, int errorCode) {
     if(cmdId == 0) {
         char msgTitle[] = "Error";
         char msgText[] = "Cannot open this directory!";
-        MessageBox* pMsgBox = new MessageBox(msgTitle, msgText, 4);
+        MessageBoxU* pMsgBox = new MessageBoxU(msgTitle, msgText, 4);
         gPsGuiMan->listenKeyboard((ExtWindowCtrl*)pMsgBox);
         ((ExtWindowCtrl*)pMsgBox)->freeWnd();
         gFileManWnd->redraw();
@@ -106,8 +106,8 @@ void IKnowledgesFileManager::onResult(int cmdId, int resultCode) {
 
 /* Handles File Manager directory list. */
 
-void IKnowledgesFileManager::onDirectoryRead(dirent** ents) {
-    gFileManWnd->onDirectoryRead(ents);
+void IKnowledgesFileManager::onDirectoryRead(tinydir_file* files) {
+    gFileManWnd->onDirectoryRead(files);
 }
 
 /* Handles keyboard pressed keys. */
