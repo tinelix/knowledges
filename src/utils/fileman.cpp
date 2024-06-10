@@ -1,17 +1,17 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
  *  Tinelix Knowledges is free software: you can redistribute it and/or modify it under the
- *  terms of the GNU Affero General Public License as published by the Free Software Foundation,
+ *  terms of the GNU General Public License as published by the Free Software Foundation,
  *  either version 3 of the License, or (at your option) any later version.
  *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU Affero General Public License for more details.
+ *  See the GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU Affero General Public License along with this
+ *  You should have received a copy of the GNU General Public License along with this
  *  program. If not, see https://www.gnu.org/licenses/.
  *
  *  Source code: https://github.com/tinelix/knowledges
@@ -21,7 +21,7 @@
 
 #define MAX_FILES_COUNT 2048
 
-FileManager::FileManager(IFileManager *pInterface) {
+FileManager::FileManager(IFileManager* pInterface) {
     gInterface = pInterface;
     gFiles = (tinydir_file*)malloc(MAX_FILES_COUNT * sizeof(tinydir_file));
     gFilesCount = 0;
@@ -35,9 +35,14 @@ FileManager::~FileManager() {
 
 void FileManager::readCurrentDir() {
     char cwd[384];
-    if(getcwd(cwd, sizeof(cwd)) != NULL) {
+    #ifdef _MSVC
+        if (_getcwd(cwd, sizeof(cwd)) != NULL) {
+    #else
+        if (getcwd(cwd, sizeof(cwd)) != NULL) {
+    #endif
         readDir(cwd);
-    } else
+    }
+    else
         gInterface->onError(0, 1);
 }
 
@@ -45,19 +50,27 @@ void FileManager::readDir(char* pDirPath) {
     int object_index = 0;
     tinydir_dir dir;
 
-    if (tinydir_open_sorted(&dir, pDirPath) == -1) {
-		gInterface->onError(0, -1);
+    #ifdef _MSVC
+        sprintf_s(gCurrentPath, "%s", pDirPath);
+    #else
+        sprintf(gCurrentPath, "%s", pDirPath);
+    #endif
+
+    #ifdef _MSVC
+        if (tinydir_open_sorted(&dir, (TCHAR*)pDirPath) == -1) {
+    #else
+        if (tinydir_open_sorted(&dir, pDirPath) == -1) {
+    #endif
+        gInterface->onError(0, -1);
         return;
-	}
+    }
 
-	sprintf(gCurrentPath, "%s", dir.path);
-
-    for(int i = 1; i < dir.n_files; i++) {
-        if(object_index >= MAX_FILES_COUNT) {
+    for (int i = 1; i < dir.n_files; i++) {
+        if (object_index >= MAX_FILES_COUNT) {
             break;
         }
         tinydir_file file;
-        if(tinydir_readfile_n(&dir, &file, i) == -1) {
+        if (tinydir_readfile_n(&dir, &file, i) == -1) {
             continue;
         }
         gFiles[object_index] = file;
@@ -85,25 +98,27 @@ char* FileManager::getRealPath(char* pDirPath) {
 
     int pathLen = strlen(pDirPath);
 
-    for(int i = 0; i < pathLen; i++) {
-        if(pDirPath[i] == '/') {
-            pathSlashes[pathSlashesCount++] = i;
+    for (int i = 0; i < pathLen; i++) {
+        if (pDirPath[i] == '/') {
+            pathSlashesCount++;
+            pathSlashes[pathSlashesCount] = i;
         }
     }
 
-    if(pathSlashesCount > 1) {
-        if(
+    if (pathSlashesCount > 1) {
+        if (
             pDirPath[pathLen - 3] == '/' && pDirPath[pathLen - 2] == '.'
             && pDirPath[pathLen - 1] == '.'
-        ) {
+            ) {
             lastPathSlash = pathSlashes[pathSlashesCount - 2];
             pDirPath[lastPathSlash] = '\0';
         }
-    } else if (pathSlashesCount == 1) {
-        if(
+    }
+    else if (pathSlashesCount == 1) {
+        if (
             pDirPath[pathLen - 3] == '/' && pDirPath[pathLen - 2] == '.'
             && pDirPath[pathLen - 1] == '.'
-        )
+            )
             pDirPath[lastPathSlash] = '\0';
     }
     return pDirPath;

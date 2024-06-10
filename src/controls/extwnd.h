@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -9,26 +9,34 @@
  *  either version 3 of the License, or (at your option) any later version.
  *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU  General Public License for more details.
+ *  See the GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU  General Public License along with this
+ *  You should have received a copy of the GNU General Public License along with this
  *  program. If not, see https://www.gnu.org/licenses/.
  *
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef KNOWLEDGES_CONTROLS_EXTWND_H
-#define KNOWLEDGES_CONTROLS_EXTWND_H
+#pragma once
 
-#ifdef __PDCURSES__
-    #include <curses.h>
-#elif __MINGW64__
-    #include <ncursesw/ncurses.h>
+#ifdef _MSVC		/* If it turns out that we are building a 
+                       project using Microsoft Visual Studio. */
+    #ifdef _PDCURSES
+        #include <curses.h>
+    #else
+        #include <ncurses.h>
+    #endif
 #else
-    #include <ncurses.h>
+    #ifdef __PDCURSES__
+        #include <curses.h>
+    #elif __MINGW64__
+        #include <ncurses/ncurses.h>
+    #else
+        #include <ncurses.h>
+    #endif
 #endif
 
-#include "uictrl.h"
+#include <controls/uictrl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,6 +50,7 @@ class ExtWindowCtrl {
         char hTitle[255], id[60];
         int hWidth, hHeight;
         WINDOW* hWnd;
+        WINDOW* hScreen;
         UIControl** hCtrls;
         ExtWindowCtrl** hChildWnds;
         ExtWindowCtrl* gParent;
@@ -61,4 +70,4 @@ class ExtWindowCtrl {
         int gChildWndsSize;
 };
 
-#endif
+

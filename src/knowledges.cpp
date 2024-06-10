@@ -1,65 +1,72 @@
-#include <cstring>
+/*  Tinelix Knowledges - encyclopedia in your console
+ *  -------------------------------------------------------------------------------------------
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
+ *
+ *  This file is part of Tinelix Knowledges program.
+ *
+ *  Tinelix Knowledges is free software: you can redistribute it and/or modify it under the
+ *  terms of the GNU General Public License as published by the Free Software Foundation,
+ *  either version 3 of the License, or (at your option) any later version.
+ *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along with this
+ *  program. If not, see https://www.gnu.org/licenses/.
+ *
+ *  Source code: https://github.com/tinelix/knowledges
+ */
 
-#ifdef __PDCURSES__
-    #include <curses.h>
-#elif __MINGW64__
-    #include <ncursesw/ncurses.h>
+#ifdef _MSVC		/* If it turns out that we are building a 
+					   project using Microsoft Visual Studio. */
+	#ifdef _PDCURSES
+		#include <curses.h>
+	#else
+		#include <ncurses.h>
+	#endif
 #else
-    #include <ncurses.h>
+	#ifdef __PDCURSES__
+		#include <curses.h>
+	#elif __MINGW64__
+		#include <ncurses/ncurses.h>
+	#else
+		#include <ncurses.h>
+	#endif
 #endif
 
-#include <stdio.h>                  // Linking standard C functions
-#include <dirent.h>
-#include <unistd.h>
+#include <tinydir.h>
 
-#include "utils/fileman.h"
-#include "utils/pguiman.h"
-#include "utils/extstr.h"
-#include "utils/knowbase.h"
+#include <interfaces/pguiman.h>
+#include <interfaces/fileman.h>
+#include <controls/extwnd.h>
+#include <controls/uictrl.h>
+#include <windows/filemanw.h>
+#include <utils/pguiman.h>
+#include <utils/fileman.h>
 
-#include "windows/knowbase.h"
-#include "windows/fileman.h"
-
-#include "controls/extwnd.h"
-#include "controls/listbox.h"
-#include "controls/msgbox.h"
-
-#include "interfaces/fileman.h"
-#include "interfaces/pguiman.h"
+PseudoGUIManager* gPsGuiMan;
+FileManager* gFileMan;
+FileManagerWnd* gFileManWnd;
 
 class IKnowledgesFileManager : IFileManager {
-    public:
-        void onError(int cmdId, int errorCode);
-        void onResult(int cmdId, int resultCode);
-        void onDirectoryRead(tinydir_file* files);
+public:
+	void onError(int cmdId, int errorCode);
+	void onResult(int cmdId, int resultCode);
+	void onDirectoryRead(tinydir_file* files);
 };
 
-IKnowledgesFileManager          *gFileManInterface;
+IKnowledgesFileManager* gFileManInterface;
 
 class IKnowledgesPseudoGUIManager : IPseudoGUIManager {
-    public:
-        void onKeyPressed(char k) {};
-        void onKeyPressed(char k, ExtWindowCtrl *pExtWnd);
+public:
+	void onKeyPressed(char k) {};
+	void onKeyPressed(char k, ExtWindowCtrl* pExtWnd);
 };
 
-IKnowledgesPseudoGUIManager     *gPsGUIManInterface;
+IKnowledgesPseudoGUIManager* gPsGUIManInterface;
 
-PseudoGUIManager                *gPsGuiMan;
-FileManager                     *gFileMan;
-
-FileManagerWnd                  *gFileManWnd;
-KnowledgeBaseWnd                *gKbWnd;
-
-KnowledgeBase                   *gKb;
-
-/* Creates File Manager window and shows directory listing. */
-
-void openFileManager() {
-    gFileManWnd = new FileManagerWnd(gFileMan, (IFileManager*)gFileManInterface);
-    gFileMan->readCurrentDir();
-}
-
-/* Application main function */
+void openFileManager();
+void openAudioFile(char* pFileName);
 
 int main() {
     gPsGUIManInterface = new IKnowledgesPseudoGUIManager();
@@ -76,22 +83,44 @@ int main() {
     return 0;
 }
 
-void openKnowledgeBase(char* pFileName) {
-    gKb = new KnowledgeBase(pFileName);
-    gKbWnd = new KnowledgeBaseWnd(gKb);
+void openFileManager() {
+    gFileManWnd = new FileManagerWnd(
+        gFileMan, (IFileManager*)gFileManInterface,
+        gPsGuiMan->getScreen()
+    );
+    gFileMan->readCurrentDir();
+}
+
+void openAudioFile(char* pFileName) {
+    
 }
 
 /* Handles File Manager errors. */
 
 void IKnowledgesFileManager::onError(int cmdId, int errorCode) {
-    if(cmdId == 0) {
+    if (cmdId == 0) {
         char msgTitle[] = "Error";
-        char msgText[] = "Cannot open this directory!";
-        MessageBoxU* pMsgBox = new MessageBoxU(msgTitle, msgText, 4);
+        char msgText[480];
+        #ifdef _MSVC
+            sprintf_s(
+                msgText, 256,
+                "Cannot open this directory! Path: %s",
+                gFileMan->getCurrentPath()
+            );
+        #else
+            sprintf(
+                msgText, 
+                "Cannot open this directory! Path: %s",
+                gFileMan->getCurrentPath()
+            );
+        #endif
+        MessageBoxU* pMsgBox = new MessageBoxU(
+            msgTitle, msgText, 4, gPsGuiMan->getScreen()
+        );
         gPsGuiMan->listenKeyboard((ExtWindowCtrl*)pMsgBox);
         ((ExtWindowCtrl*)pMsgBox)->freeWnd();
         gFileManWnd->redraw();
-        gPsGuiMan->listenKeyboard((ExtWindowCtrl*) gFileManWnd);
+        gPsGuiMan->listenKeyboard((ExtWindowCtrl*)gFileManWnd);
     }
 }
 
@@ -99,8 +128,8 @@ void IKnowledgesFileManager::onError(int cmdId, int errorCode) {
 
 void IKnowledgesFileManager::onResult(int cmdId, int resultCode) {
     gFileManWnd->onFileManResult(cmdId, resultCode);
-    if(cmdId == 1) {
-        openKnowledgeBase(gFileManWnd->getSelectedFileName());
+    if (cmdId == 1) {
+        openAudioFile(gFileManWnd->getSelectedFileName());
     }
 }
 
@@ -113,15 +142,16 @@ void IKnowledgesFileManager::onDirectoryRead(tinydir_file* files) {
 /* Handles keyboard pressed keys. */
 
 void IKnowledgesPseudoGUIManager::onKeyPressed(char k, ExtWindowCtrl* pExtWnd) {
-    if((int)k == 2 || (int)k == 3) {
+    if ((int)k == 2 || (int)k == 3) {
         ListBoxCtrl* mFileListBox = ((ListBoxCtrl*)gFileManWnd->hCtrls[0]);
-        if(strcmp(pExtWnd->id, "fileManWnd") == 0) {
-            if(gFileManWnd->getControlsSize() > 0) {
+        if (strcmp(pExtWnd->id, "fileManWnd") == 0) {
+            if (gFileManWnd->getControlsSize() > 0) {
                 mFileListBox->onKeyPressed(k);
             }
         }
-    } else if((int)k == 10) { // ENTER key
-        if(strcmp(pExtWnd->id, "fileManWnd") == 0
+    }
+    else if ((int)k == 10) { // ENTER key
+        if (strcmp(pExtWnd->id, "fileManWnd") == 0
             || strcmp(pExtWnd->id, "articlesListWnd") == 0) {
             if (k == 'q') {
                 delete gFileManWnd;
@@ -129,4 +159,3 @@ void IKnowledgesPseudoGUIManager::onKeyPressed(char k, ExtWindowCtrl* pExtWnd) {
         }
     }
 }
-

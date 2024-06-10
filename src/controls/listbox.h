@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -17,22 +17,28 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef KNOWLEDGES_CONTROLS_LISTBOX_H
-#define KNOWLEDGES_CONTROLS_LISTBOX_H
+#pragma once
 
-#include "extwnd.h"
-#include "uictrl.h"
-#include "../utils/extstr.h"
-#include <cstring>
-#include <cstdio>
-
-#ifdef __PDCURSES__
-    #include <curses.h>
-#elif __MINGW64__
-    #include <ncursesw/ncurses.h>
+#ifdef _MSVC		/* If it turns out that we are building a 
+                       project using Microsoft Visual Studio. */
+    #ifdef _PDCURSES
+        #include <curses.h>
+    #else
+        #include <ncurses.h>
+    #endif
 #else
-    #include <ncurses.h>
+    #ifdef __PDCURSES__
+        #include <curses.h>
+    #elif __MINGW64__
+        #include <ncurses/ncurses.h>
+    #else
+        #include <ncurses.h>
+    #endif
 #endif
+
+#include <controls/uictrl.h>
+#include <controls/extwnd.h>
+#include <utils/extstr.h>
 
 struct ListItem {
     char title[384];
@@ -44,30 +50,29 @@ struct ListItem {
 };
 
 class ListBoxCtrl : UIControl {
-    public:
-        ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos);
-        ~ListBoxCtrl();
-        void addListItem(int index, ListItem* item);
-        int getSelectionIndex();
-        void setSelectionIndex(int index);
-        void onKeyPressed(char k);
-        void drawListPointer(int x, int y, bool isVisible);
-        void drawListPointer(int x, int y, char p, bool isVisible);
-        void goToPage(int pPageNumber);
-        void recreate(int pItemCount);
-        void expand(int pIndex, bool status);
-        struct ListItem** getItems();
-        int getPageNumber();
-        int getItemsCount();
-        int getSubItemsCount(int pIndex);
-        int hX, hY, hWidth, hHeight, hExpandedItemIndex, hSubItemCount;
-        bool expanded;
-    protected:
-        struct ListItem**   gListItems;
-        bool gTrackPos;
-        int getVirtualSelectionIndex();
-        ExtWindowCtrl* gParent;
-        int gSelectionIndex, gPageNumber, gItemCount;
+public:
+    ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos);
+    ~ListBoxCtrl();
+    void addListItem(int index, ListItem* item);
+    int getSelectionIndex();
+    void setSelectionIndex(int index);
+    void onKeyPressed(char k);
+    void drawListPointer(int x, int y, bool isVisible);
+    void drawListPointer(int x, int y, char p, bool isVisible);
+    void goToPage(int pPageNumber);
+    void recreate(int pItemCount);
+    void expand(int pIndex, bool status);
+    struct ListItem** getItems();
+    int getPageNumber();
+    int getItemsCount();
+    int getSubItemsCount(int pIndex);
+    int hX, hY, hWidth, hHeight, hExpandedItemIndex, hSubItemCount;
+    bool expanded;
+protected:
+    struct ListItem** gListItems;
+    bool gTrackPos;
+    int getVirtualSelectionIndex();
+    ExtWindowCtrl* gParent;
+    int gSelectionIndex, gPageNumber, gItemCount;
 };
 
-#endif

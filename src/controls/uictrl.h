@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -17,14 +17,12 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef KNOWLEDGES_UTILS_UICTRL_H
-#define KNOWLEDGES_UTILS_UICTRL_H
+#pragma once
 
 class UIControl {
-    public:
-        char hId[60];
-        int hType;
-        int hX, hY, hWidth, hHeight;
+public:
+    char hId[60];
+    int hType;
+    int hX, hY, hWidth, hHeight;
 };
 
-#endif

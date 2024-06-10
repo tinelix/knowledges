@@ -1,17 +1,17 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
  *  Tinelix Knowledges is free software: you can redistribute it and/or modify it under the
- *  terms of the GNU Affero General Public License as published by the Free Software Foundation,
+ *  terms of the GNU General Public License as published by the Free Software Foundation,
  *  either version 3 of the License, or (at your option) any later version.
  *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *  See the GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU Affero General Public License along with this
+ *  You should have received a copy of the GNU General Public License along with this
  *  program. If not, see https://www.gnu.org/licenses/.
  *
  *  Source code: https://github.com/tinelix/knowledges
@@ -29,7 +29,11 @@ ExtWindowCtrl::ExtWindowCtrl() {
 }
 
 ExtWindowCtrl::ExtWindowCtrl(char* pId) {
-    sprintf(id, "%s", pId);
+    #ifdef _MSVC
+        sprintf_s(id, strlen(pId), "%s", pId);
+    #else
+        sprintf(id, "%s", pId);
+    #endif
     hWidth = 8;
     hHeight = 8;
     gCtrlSize = 0;
@@ -39,7 +43,11 @@ ExtWindowCtrl::ExtWindowCtrl(char* pId) {
 }
 
 ExtWindowCtrl::ExtWindowCtrl(char* pId, ExtWindowCtrl* pParent) {
-    sprintf(id, "%s", pId);
+    #ifdef _MSVC
+        sprintf_s(id, strlen(pId), "%s", pId);
+    #else
+        sprintf(id, "%s", pId);
+    #endif
     hWidth = 8;
     hHeight = 8;
     gCtrlSize = 0;
@@ -61,33 +69,39 @@ void ExtWindowCtrl::addControl(UIControl* pCtrl) {
 
 void ExtWindowCtrl::addControl(UIControl* pCtrl, int index) {
     hCtrls[gCtrlSize] = pCtrl;
-    if(gCtrlSize >= index)
+    if (gCtrlSize >= index)
         gCtrlSize++;
 }
 
 void ExtWindowCtrl::addChildWindow(char* id, char* title, int width, int height, int x, int y) {
 
-    ExtWindowCtrl *pExtWnd = new ExtWindowCtrl(id, this);
+    ExtWindowCtrl* pExtWnd = new ExtWindowCtrl(id, this);
 
     int realWidth = 5;
     int realHeight = 5;
 
     realWidth = width;
-    if(width <= 5) {
+    if (width <= 5) {
         realWidth = 5;
-    } else {
+    }
+    else {
         realWidth = width;
     }
 
-    if(height <= 5) {
+    if (height <= 5) {
         realHeight = 5;
-    } else {
+    }
+    else {
         realHeight = height;
     }
 
     pExtWnd->hWnd = newwin(realHeight, realWidth, y + 1, x + 1);
 
-    sprintf(pExtWnd->hTitle, "%s", title);      // <-- store window text in ExtWindow object
+    #ifdef _MSVC
+        sprintf_s(pExtWnd->hTitle, "%s", title);      // <-- store window text in ExtWindow object
+    #else
+        sprintf(pExtWnd->hTitle, "%s", title);      // <-- store window text in ExtWindow object
+    #endif
 
     pExtWnd->hWidth = realWidth;
     pExtWnd->hHeight = realHeight;

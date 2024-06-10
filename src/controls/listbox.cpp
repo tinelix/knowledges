@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -21,7 +21,7 @@
 
 ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos) {
     gParent = pParent;
-    gListItems = (ListItem**) malloc(pItemCount * sizeof(ListItem));
+    gListItems = (ListItem**)malloc(pItemCount * sizeof(ListItem));
     gSelectionIndex = 0;
     hType = 1;
     gPageNumber = 0;
@@ -32,43 +32,45 @@ ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos)
 }
 
 ListBoxCtrl::~ListBoxCtrl() {
-    for(int i = 0; i < gItemCount; i++) {
+    for (int i = 0; i < gItemCount; i++) {
         free(gListItems[i]->subItems);
     }
     free(gListItems);
 }
 
 void ListBoxCtrl::recreate(int pItemCount) {
-    for(int y = hY; y <= (hHeight + hY); y++) {
-        for(int x = hX; x <= (hWidth + hX); x++) {
+    for (int y = hY; y <= (hHeight + hY); y++) {
+        for (int x = hX; x <= (hWidth + hX); x++) {
             mvwaddch(gParent->hWnd, y, x, ' ');
         }
     }
     wrefresh(gParent->hWnd);
     free(gListItems);
-    gListItems = (ListItem**) malloc(pItemCount * sizeof(ListItem));
+    gListItems = (ListItem**)malloc(pItemCount * sizeof(ListItem));
     gPageNumber = 0;
     gSelectionIndex = 0;
     gItemCount = pItemCount;
 }
 
 void ListBoxCtrl::addListItem(int index, ListItem* item) {
-    if(item == NULL) return;
+    if (item == NULL) return;
 
     gListItems[index] = item;
 
-
     char shortestTitle[128];
-
-    sprintf(shortestTitle, "%s", item->title);
-    if((int)strlen(item->title) > hWidth - 2) {
+    #ifdef _MSVC
+        sprintf_s(shortestTitle, 128, "%s", item->title);
+    #else
+        sprintf(shortestTitle, "%s", item->title);
+    #endif
+    if ((int)strlen(item->title) > hWidth - 2) {
         ExtString::strcut(shortestTitle, hWidth + 16, -1);
     }
-    if(index <= hHeight)  {
+    if (index <= hHeight) {
         mvwprintw(gParent->hWnd, (index % (hHeight + 1)) + hY, hX + 2, "%s", shortestTitle);
     }
 
-    if(index == 0) {
+    if (index == 0) {
         drawListPointer(
             hX,
             hY,
@@ -78,30 +80,38 @@ void ListBoxCtrl::addListItem(int index, ListItem* item) {
 }
 
 int ListBoxCtrl::getSelectionIndex() {
-    if(gSelectionIndex > 0)
+    if (gSelectionIndex > 0)
         return (gPageNumber * hHeight) + gSelectionIndex;
     else
         return 0;
 }
 
 void ListBoxCtrl::setSelectionIndex(int index) {
-    if(hHeight > 0)
+    if (hHeight > 0)
         gSelectionIndex = index % hHeight;
 }
 
 int ListBoxCtrl::getVirtualSelectionIndex() {
-    if(gTrackPos) {
+    if (gTrackPos) {
         char selection_label[80];
-        sprintf(
-            selection_label, "%d / %d",
-            (gPageNumber * hHeight) + gSelectionIndex + 1, gItemCount
-        );
+        #ifdef _MSVC
+            sprintf_s(
+                selection_label, "%d / %d",
+                80,
+                (gPageNumber * hHeight) + gSelectionIndex + 1, gItemCount
+            );
+        #else
+            sprintf(
+                selection_label, "%d / %d",
+                (gPageNumber * hHeight) + gSelectionIndex + 1, gItemCount
+            );
+        #endif
         mvwprintw(
             gParent->hWnd, 2, gParent->hWidth - strlen(selection_label) - 5,
             "   %s", selection_label
         );
     }
-    if(gSelectionIndex > 0)
+    if (gSelectionIndex > 0)
         return gSelectionIndex;
     else
         return 0;
@@ -125,21 +135,21 @@ int ListBoxCtrl::getPageNumber() {
 }
 
 void ListBoxCtrl::goToPage(int pPageNumb) {
-    if(pPageNumb < 0)
+    if (pPageNumb < 0)
         gPageNumber = 0;
 
-    if(gItemCount < (pPageNumb) * hHeight) return;
+    if (gItemCount < (pPageNumb)*hHeight) return;
     gPageNumber = pPageNumb;
 
-    for(int y = hY; y <= (hHeight + hY); y++) {
-        for(int x = hX; x <= (hWidth + hX); x++) {
+    for (int y = hY; y <= (hHeight + hY); y++) {
+        for (int x = hX; x <= (hWidth + hX); x++) {
             mvwaddch(gParent->hWnd, y, x, ' ');
         }
     }
 
-    for(int y = 0; y <= hHeight; y++) {
+    for (int y = 0; y <= hHeight; y++) {
         ListItem* item = gListItems[(pPageNumb * hHeight) + y];
-        if(item != NULL)  {
+        if (item != NULL) {
             mvwprintw(gParent->hWnd, y + hY, 4, "%s", item->title);
         }
     }
@@ -147,46 +157,48 @@ void ListBoxCtrl::goToPage(int pPageNumb) {
 
 void ListBoxCtrl::onKeyPressed(char k) {
     int virtIndex = getVirtualSelectionIndex();
-    if((int)k == 2 || (int)k == 3) {
+    if ((int)k == 2 || (int)k == 3) {
 
-        if((int)k == 3) { // top arrow key
-            if(virtIndex > 0) {
+        if ((int)k == 3) { // top arrow key
+            if (virtIndex > 0) {
                 virtIndex--;
             }
-            if(virtIndex <= 0 && gPageNumber > 0) {
+            if (virtIndex <= 0 && gPageNumber > 0) {
                 goToPage(gPageNumber - 1);
                 virtIndex = hHeight;
             }
-        } else if((int)k == 2) { // bottom arrow key
-            if(gItemCount - 1 > getSelectionIndex()) {
+        }
+        else if ((int)k == 2) { // bottom arrow key
+            if (gItemCount - 1 > getSelectionIndex()) {
                 virtIndex++;
             }
-            if(virtIndex >= hHeight) {
+            if (virtIndex >= hHeight) {
                 virtIndex = 0;
-                if(virtIndex <= 0) {
+                if (virtIndex <= 0) {
                     goToPage(gPageNumber + 1);
                 }
             }
         }
 
         int list_index = getVirtualSelectionIndex() + hY;
-        if(virtIndex >= 0 && virtIndex < getItemsCount()) {
+        if (virtIndex >= 0 && virtIndex < getItemsCount()) {
             drawListPointer(
-                hX, list_index,false
+                hX, list_index, false
             );
         }
 
-        if(virtIndex <= getItemsCount() - 1) {
+        if (virtIndex <= getItemsCount() - 1) {
             gSelectionIndex = virtIndex;
             list_index = getVirtualSelectionIndex() + hY;
         }
 
-        if(virtIndex < getItemsCount()) {
+        if (virtIndex < getItemsCount()) {
             drawListPointer(
                 hX, list_index, true
             );
         }
-    } else if(k == (int)4 || k == (int)5) {
+    }
+    else if (k == (int)4 || k == (int)5) {
         int virtIndex = getVirtualSelectionIndex();
         int index = getSelectionIndex();
 
@@ -195,15 +207,17 @@ void ListBoxCtrl::onKeyPressed(char k) {
         );
 
         expand(index, k == (int)5);
-    } else if(k == (int)82){
-        if(gPageNumber * hHeight < getItemsCount()) {
+    }
+    else if (k == (int)82) {
+        if (gPageNumber * hHeight < getItemsCount()) {
             goToPage(gPageNumber + 1);
             drawListPointer(
                 hX, hY + virtIndex, '^', k == (int)5
             );
         }
-    } else if(k == (int)83) {
-        if(gPageNumber > 0) {
+    }
+    else if (k == (int)83) {
+        if (gPageNumber > 0) {
             goToPage(gPageNumber - 1);
             drawListPointer(
                 hX, hY + virtIndex, '^', k == (int)5
@@ -217,10 +231,11 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 
     int pIndex2 = pIndex;
 
-    if(pIndex > hExpandedItemIndex &&
-       pIndex <= hExpandedItemIndex + hSubItemCount) {
+    if (pIndex > hExpandedItemIndex &&
+        pIndex <= hExpandedItemIndex + hSubItemCount) {
         return;
-    } else if(pIndex > hExpandedItemIndex + hSubItemCount) {
+    }
+    else if (pIndex > hExpandedItemIndex + hSubItemCount) {
         pIndex2 -= hSubItemCount;
     }
 
@@ -228,13 +243,13 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 
     int subItemsCount = gListItems[pIndex2]->subItemsCount;
 
-    if(subItemsCount == 0) return;
+    if (subItemsCount == 0) return;
 
-    if((status && !parentItem->expanded)
+    if ((status && !parentItem->expanded)
         || (!status && parentItem->expanded)) {
 
-        for(int y = hY; y <= (hHeight + hY); y++) {
-            for(int x = hX; x <= (hWidth + hX); x++) {
+        for (int y = hY; y <= (hHeight + hY); y++) {
+            for (int x = hX; x <= (hWidth + hX); x++) {
                 mvwaddch(gParent->hWnd, y, x, ' ');
             }
         }
@@ -244,8 +259,8 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 
     char shortestTitle[384];
 
-    if(status && !parentItem->expanded) {
-        if(expanded && pIndex2 != hExpandedItemIndex) {
+    if (status && !parentItem->expanded) {
+        if (expanded && pIndex2 != hExpandedItemIndex) {
             expand(hExpandedItemIndex, false);   // <-- recursive call if there is an expanded item
         }
 
@@ -254,11 +269,15 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 
         // Before child items
 
-        for(int y = 0; y <= (pIndex2 % hHeight); y++) {
+        for (int y = 0; y <= (pIndex2 % hHeight); y++) {
             ListItem* item = gListItems[(gPageNumber * hHeight) + y];
-            if(item != NULL) {
-                sprintf(shortestTitle, "%s", item->title);
-                if((int)strlen(parentItem->title) > hWidth - 2) {
+            if (item != NULL) {
+                #ifdef _MSVC
+                    sprintf_s(shortestTitle, 128, "%s", item->title);
+                #else
+                    sprintf(shortestTitle, "%s", item->title);
+                #endif
+                if ((int)strlen(parentItem->title) > hWidth - 2) {
                     ExtString::strcut(shortestTitle, hWidth + 16, -1);
                 }
 
@@ -271,33 +290,41 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 
         // Child items
 
-        for(int y = firstSubItemY; y < endOfSubItems; y++) {
+        for (int y = firstSubItemY; y < endOfSubItems; y++) {
             ListItem* item = gListItems[pIndex2]->subItems[y - firstSubItemY];
-            if(item != NULL)  {
-                for(int x = hX; x <= hWidth; x++) {
+            if (item != NULL) {
+                for (int x = hX; x <= hWidth; x++) {
                     mvwaddch(gParent->hWnd, y + hY, x, ' ');
                 }
-
-                sprintf(shortestTitle, "%s", item->title);
-                if((int)strlen(parentItem->title) > hWidth - 6) {
+                #ifdef _MSVC
+                    sprintf_s(shortestTitle, 128, "%s", item->title);
+                #else
+                    sprintf(shortestTitle, "%s", item->title);
+                #endif
+                if ((int)strlen(parentItem->title) > hWidth - 6) {
                     ExtString::strcut(shortestTitle, hWidth + 12, -1);
                 }
 
-                if(y < endOfSubItems - 1) {
+                if (y < endOfSubItems - 1) {
                     mvwprintw(gParent->hWnd, hY + y, 4, "\u251C\u2500 %s", shortestTitle);
-                } else {
+                }
+                else {
                     mvwprintw(gParent->hWnd, hY + y, 4, "\u2514\u2500 %s", shortestTitle);
                 }
             }
         }
 
-       // After child items
+        // After child items
 
-        for(int y = firstSubItemY; y <= (getItemsCount() % hHeight - 1); y++) {
+        for (int y = firstSubItemY; y <= (getItemsCount() % hHeight - 1); y++) {
             ListItem* item = gListItems[y];
-            if(item != NULL)  {
-                sprintf(shortestTitle, "%s", item->title);
-                if((int)strlen(parentItem->title) > hWidth - 2) {
+            if (item != NULL) {
+                #ifdef _MSVC
+                    sprintf_s(shortestTitle, 128, "%s", item->title);
+                #else
+                    sprintf(shortestTitle, "%s", item->title);
+                #endif
+                if ((int)strlen(parentItem->title) > hWidth - 2) {
                     ExtString::strcut(shortestTitle, hWidth + 16, -1);
                 }
 
@@ -306,13 +333,18 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
         }
 
         gItemCount += subItemsCount;
-    } else if(!status && parentItem->expanded) {
+    }
+    else if (!status && parentItem->expanded) {
         hSubItemCount = 0;
-        for(int y = 0; y <= ((getItemsCount() - subItemsCount - 1) % hHeight); y++) {
+        for (int y = 0; y <= ((getItemsCount() - subItemsCount - 1) % hHeight); y++) {
             ListItem* item = gListItems[(gPageNumber * hHeight) + y];
-            if(item != NULL)  {
-                sprintf(shortestTitle, "%s", item->title);
-                if((int)strlen(parentItem->title) > hWidth - 2) {
+            if (item != NULL) {
+                #ifdef _MSVC
+                    sprintf_s(shortestTitle, 128, "%s", item->title);
+                #else
+                    sprintf(shortestTitle, "%s", item->title);
+                #endif
+                if ((int)strlen(parentItem->title) > hWidth - 2) {
                     ExtString::strcut(shortestTitle, hWidth + 16, -1);
                 }
 
@@ -329,10 +361,11 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 }
 
 void ListBoxCtrl::drawListPointer(int x, int y, bool isVisible) {
-    if(isVisible) {
+    if (isVisible) {
         mvwaddch(gParent->hWnd, y, x, '*');  // Adds a star pointer to the specified position
         mvwchgat(gParent->hWnd, y, x, hWidth, A_BOLD, 1, NULL);
-    } else {
+    }
+    else {
         mvwaddch(gParent->hWnd, y, x, ' ');  // Removes a star pointer to the specified position
         mvwchgat(gParent->hWnd, y, x, hWidth, A_NORMAL, 2, NULL);
     }
@@ -341,10 +374,11 @@ void ListBoxCtrl::drawListPointer(int x, int y, bool isVisible) {
 }
 
 void ListBoxCtrl::drawListPointer(int x, int y, char p, bool isVisible) {
-    if(isVisible) {
+    if (isVisible) {
         mvwaddch(gParent->hWnd, y, x, p);  // Adds a star pointer to the specified position
         mvwchgat(gParent->hWnd, y, x, hWidth, A_BOLD, 1, NULL);
-    } else {
+    }
+    else {
         mvwaddch(gParent->hWnd, y, x, ' ');  // Removes a star pointer to the specified position
         mvwchgat(gParent->hWnd, y, x, hWidth, A_NORMAL, 2, NULL);
     }

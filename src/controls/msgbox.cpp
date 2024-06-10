@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -19,21 +19,27 @@
 
 #include "msgbox.h"
 
-MessageBoxU::MessageBoxU(char *pWndTitle, char *pMsgText) {
-    sprintf(id, "msgBoxWnd");
-    sprintf(hTitle, "%s", pWndTitle);
-    sprintf(hMsgText, "%s", pMsgText);
+MessageBoxU::MessageBoxU(char* pWndTitle, char* pMsgText, WINDOW* screen) {
+    #ifdef _MSVC
+        sprintf_s(id, "msgBoxWnd");
+        sprintf_s(hTitle, 75, "%s", pWndTitle);
+        sprintf_s(hMsgText, 255, "%s", pMsgText);
+    #else    
+        sprintf(id, "msgBoxWnd");
+        sprintf(hTitle, "%s", pWndTitle);
+        sprintf(hMsgText, "%s", pMsgText);
+    #endif
 
     hWidth = strlen(pMsgText) + 4;
     hHeight = 5;
 
     int gActiveWidth, gActiveHeight;
 
-    getmaxyx(stdscr, gActiveHeight, gActiveWidth);
+    getmaxyx(screen, gActiveHeight, gActiveWidth);
 
     hWnd = newwin(hHeight, hWidth,
-                  ((gActiveHeight - hHeight) / 2) + 1,
-                  (gActiveWidth - hWidth) / 2);
+        ((gActiveHeight - hHeight) / 2) + 1,
+        (gActiveWidth - hWidth) / 2);
 
     keypad(hWnd, true);
 
@@ -53,17 +59,23 @@ MessageBoxU::MessageBoxU(char *pWndTitle, char *pMsgText) {
     wrefresh(hWnd);
 }
 
-MessageBoxU::MessageBoxU(char *pWndTitle, char *pMsgText, int pBgColor) {
-    sprintf(id, "msgBoxWnd");
-    sprintf(hTitle, "%s", pWndTitle);
-    sprintf(hMsgText, "%s", pMsgText);
+MessageBoxU::MessageBoxU(char* pWndTitle, char* pMsgText, int pBgColor, WINDOW* screen) {
+    #ifdef _MSVC
+        sprintf_s(id, "msgBoxWnd");
+        sprintf_s(hTitle, 75, "%s", pWndTitle);
+        sprintf_s(hMsgText, 255, "%s", pMsgText);
+    #else    
+        sprintf(id, "msgBoxWnd");
+        sprintf(hTitle, "%s", pWndTitle);
+        sprintf(hMsgText, "%s", pMsgText);
+    #endif
 
     hWidth = strlen(pMsgText) + 4;
     hHeight = 5;
 
     int gActiveWidth, gActiveHeight;
 
-    getmaxyx(stdscr, gActiveHeight, gActiveWidth);
+    getmaxyx(screen, gActiveHeight, gActiveWidth);
 
     hWnd = newwin(hHeight, hWidth, ((gActiveHeight - hHeight) / 2) + 1, (gActiveWidth - hWidth) / 2);
 

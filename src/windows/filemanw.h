@@ -19,11 +19,6 @@
 
 #pragma once
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <locale.h>
-
 #ifdef _MSVC		/* If it turns out that we are building a 
 					   project using Microsoft Visual Studio. */
 	#ifdef _PDCURSES
@@ -41,46 +36,34 @@
 	#endif
 #endif
 
-#include <version.h>
-#include <interfaces/pguiman.h>
+#include <tinydir.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <wchar.h>
+
+#include <controls/uictrl.h>
 #include <controls/extwnd.h>
+#include <controls/listbox.h>
+#include <controls/msgbox.h>
+#include <utils/extstr.h>
+#include <utils/fileman.h>
+#include <interfaces/fileman.h>
 
-// Default colors
-
-#define COLOR_LIGHT_WHITE			255
-#define COLOR_GRAY					240
-#define COLOR_DARK_GRAY				235
-#define COLOR_DARK_GREEN			 28
-#define COLOR_DEEP_BLACK			 16
-#define COLOR_LIGHT_RED				 82
-#define COLOR_LIGHT_GREEN			 47
-#define COLOR_BLUE_SKY				 68
-
-// Colors for console with limited color palettes
-
-#define COLOR_LIGHT_WHITE_4BIT		  6
-#define COLOR_GRAY_4BIT				  7
-#define COLOR_DARK_GRAY_4BIT		  8
-#define COLOR_DEEP_BLACK_4BIT		 16
-#define COLOR_LIGHT_RED_4BIT		  1
-#define COLOR_LIGHT_GREEN_4BIT		  2
-#define COLOR_BLUE_SKY_4BIT		      3
-#define COLOR_LIGHT_CYAN_4BIT		  11
-
-class PseudoGUIManager
+class FileManagerWnd : public ExtWindowCtrl
 {
 	public:
-		PseudoGUIManager(IPseudoGUIManager* pInterface);
-		~PseudoGUIManager();
-		void showTopVersionInfo();
-		void listenKeyboard();
-		void listenKeyboard(ExtWindowCtrl* pExtWnd);
-		WINDOW* getScreen();
+		FileManagerWnd(FileManager* pFileMan, IFileManager* pInterface, WINDOW* screen);
+		char* getSelectedFileName();
+		void listen(bool value);
+		void onKeyPressed(char k);
+		void onDirectoryRead(tinydir_file* files);
+		void onFileManResult(int cmdId, int resultCode);
+		void onFileManError(int cmdId, int errorCode);
+		bool disableListening;
 	private:
-		IPseudoGUIManager	*gInterface;
-		WINDOW				*screen;
-		char                gWndTitle[255];
-		int					gActiveWidth;
-		int					gActiveHeight;
+		FileManager* gFileMan;
+		IFileManager* gInterface;
+		char* gSelectedFileName;
 };
 

@@ -1,5 +1,23 @@
-#ifndef KNOWLEDGES_UTILS_EXTSTR_H
-#define KNOWLEDGES_UTILS_EXTSTR_H
+/*  Tinelix Knowledges - encyclopedia in your console
+ *  -------------------------------------------------------------------------------------------
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
+ *
+ *  This file is part of Tinelix Knowledges program.
+ *
+ *  Tinelix Knowledges is free software: you can redistribute it and/or modify it under the
+ *  terms of the GNU General Public License as published by the Free Software Foundation,
+ *  either version 3 of the License, or (at your option) any later version.
+ *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ *  without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  See the GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along with this
+ *  program. If not, see https://www.gnu.org/licenses/.
+ *
+ *  Source code: https://github.com/tinelix/knowledges
+ */
+
+#pragma once
 
 #include <cstddef>
 #include <stdio.h>
@@ -7,13 +25,11 @@
 #include <cstring>
 
 class ExtString {
-    public:
-        static bool strcrlfc(char* out);
-        static int strcut(char *str, int begin, int len);
-        static int strendq(const char *str, const char *suffix);
-        static char* strwrap(char *out, int width);
-        static size_t strlines(char* out, bool useCrLf);
-        static char** strsplitln(char *out);
+public:
+    static bool strcrlfc(char* out);
+    static int strcut(char* str, int begin, int len);
+    static int strendq(const char* str, const char* suffix);
+    static char* strwrap(char* out, int width);
+    static size_t strlines(char* out, bool useCrLf);
+    static char** strsplitln(char* out);
 };
-
-#endif

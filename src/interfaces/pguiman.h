@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -17,17 +17,14 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef KNOWLEDGES_INTERFACES_PGUIMAN_H
-#define KNOWLEDGES_INTERFACES_PGUIMAN_H
+#pragma once
 
-#include "../controls/extwnd.h"
+#include <controls/extwnd.h>
 
 class IPseudoGUIManager {
-    public:
-        IPseudoGUIManager() {};
-        virtual ~IPseudoGUIManager() {};
-        virtual void onKeyPressed(char k) = 0;
-        virtual void onKeyPressed(char k, ExtWindowCtrl* pExtWnd) = 0;
+public:
+    IPseudoGUIManager() {};
+    virtual ~IPseudoGUIManager() {};
+    virtual void onKeyPressed(char k) = 0;
+    virtual void onKeyPressed(char k, ExtWindowCtrl* pExtWnd) = 0;
 };
-
-#endif // OPENDSS_INTERFACES_PGUIMAN_H

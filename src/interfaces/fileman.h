@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -17,18 +17,15 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef KNOWLEDGES_INTERFACES_FILEMAN_H
-#define KNOWLEDGES_INTERFACES_FILEMAN_H
+#pragma once
 
 #include <tinydir.h>
 
 class IFileManager {
-    public:
-        IFileManager() {};
-        virtual ~IFileManager() {};
-        virtual void onError(int cmdId, int errorCode) = 0;
-        virtual void onResult(int cmdId, int resultCode) = 0;
-        virtual void onDirectoryRead(tinydir_file* files) = 0;
+public:
+    IFileManager() {};
+    virtual ~IFileManager() {};
+    virtual void onError(int cmdId, int errorCode) = 0;
+    virtual void onResult(int cmdId, int resultCode) = 0;
+    virtual void onDirectoryRead(tinydir_file* files) = 0;
 };
-
-#endif

@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -17,36 +17,37 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef KNOWLEDGES_UTILS_FILEMAN_H
-#define KNOWLEDGES_UTILS_FILEMAN_H
+#pragma once
 
 #include <tinydir.h>
-#include <unistd.h>
 #include <interfaces/fileman.h>
-#include <controls/listbox.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstring>
 
-class FileManager {
-    public:
-        FileManager(IFileManager *pInterface);
-        ~FileManager();
-        void countSlashes(char* pDirPath);
-        void readCurrentDir();
-        void readDir(char* pDirPath);
-        tinydir_file getFile(int index);
-        long getFilesCount();
-        char* getRealPath(char* pDirPath);
-        char* getCurrentPath();
+#ifdef _MSVC
+    #include <direct.h>
+#else
+    #include <unistd.h>
+#endif
 
-    private:
-        IFileManager        *gInterface;
-        char                gCurrentPath[384];
-        int                 gSelectionIndex;
-        tinydir_file        *gFiles;
-        long                gFilesCount;
-        int                 gPrevSlash;
+class FileManager {
+public:
+    FileManager(IFileManager* pInterface);
+    ~FileManager();
+    void readCurrentDir();
+    void readDir(char* pDirPath);
+    tinydir_file getFile(int index);
+    long getFilesCount();
+    char* getRealPath(char* pDirPath);
+    char* getCurrentPath();
+
+private:
+    IFileManager* gInterface;
+    char                gCurrentPath[384];
+    int                 gSelectionIndex;
+    tinydir_file* gFiles;
+    long                gFilesCount;
+    int                 gPrevSlash;
 };
 
-#endif

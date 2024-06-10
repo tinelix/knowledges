@@ -1,6 +1,6 @@
 /*  Tinelix Knowledges - encyclopedia in your console
  *  -------------------------------------------------------------------------------------------
- *  Copyright Â© 2024 Dmitry Tretyakov (aka. Tinelix)
+ *  Copyright © 2024 Dmitry Tretyakov (aka. Tinelix)
  *
  *  This file is part of Tinelix Knowledges program.
  *
@@ -17,30 +17,18 @@
  *  Source code: https://github.com/tinelix/knowledges
  */
 
-#ifndef KNOWLEDGES_CONTROLS_MSGBOX_H
-#define KNOWLEDGES_CONTROLS_MSGBOX_H
+#pragma once
 
-#include "extwnd.h"
-#include "../utils/pguiman.h"
-
-#ifdef __PDCURSES__
-    #include <curses.h>
-#elif __MINGW64__
-    #include <ncursesw/ncurses.h>
-#else
-    #include <ncurses.h>
-#endif
+#include <controls/extwnd.h>
 
 class MessageBoxU : ExtWindowCtrl {
-    public:
-        MessageBoxU(char *pWndTitle, char *pMsgText);
-        MessageBoxU(char *pWndTitle, char *pMsgText, int pBgColor);
-        ~MessageBoxU();
-        void free();
-    private:
-        void drawMessageText();
-        void drawButton();
-        char hMsgText[512];
+public:
+    MessageBoxU(char* pWndTitle, char* pMsgText, WINDOW* screen);
+    MessageBoxU(char* pWndTitle, char* pMsgText, int pBgColor, WINDOW* screen);
+    ~MessageBoxU();
+    void free();
+private:
+    void drawMessageText();
+    void drawButton();
+    char hMsgText[512];
 };
-
-#endif
