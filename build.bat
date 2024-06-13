@@ -28,7 +28,12 @@ echo       Multi-Byte Character Set adds support for Windows 98.
 echo.
 set /p WIDECHAR_BUILD=Press Y(es) or N(o) key 
 
-nmake %PDCURSES_SRCDIR%/win32/vcwin32.mak WIDE=%WIDECHAR_BUILD% DLL=Y
+
+IF "%WIDECHAR_BUILD%"=="N" (
+	nmake %PDCURSES_SRCDIR%/win32/vcwin32.mak DLL=Y
+) ELSE (
+	nmake %PDCURSES_SRCDIR%/win32/vcwin32.mak WIDE=Y DLL=Y
+)
 
 cd ../../..
 
