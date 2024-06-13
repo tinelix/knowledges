@@ -25,8 +25,10 @@
     <ClCompile Include="src\knowledges.cpp" />
     <ClCompile Include="src\utils\extstr.cpp" />
     <ClCompile Include="src\utils\fileman.cpp" />
+    <ClCompile Include="src\utils\knowbase.cpp" />
     <ClCompile Include="src\utils\pguiman.cpp" />
     <ClCompile Include="src\windows\filemanw.cpp" />
+    <ClCompile Include="src\windows\knwbasew.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\controls\extwnd.h" />
@@ -35,9 +37,11 @@
     <ClInclude Include="src\controls\uictrl.h" />
     <ClInclude Include="src\utils\extstr.h" />
     <ClInclude Include="src\utils\fileman.h" />
+    <ClInclude Include="src\utils\knowbase.h" />
     <ClInclude Include="src\utils\pguiman.h" />
     <ClInclude Include="src\version.h" />
     <ClInclude Include="src\windows\filemanw.h" />
+    <ClInclude Include="src\windows\knwbasew.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -95,21 +99,25 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)\out\windows-$(PlatformShortName)</OutDir>
     <ExecutablePath>$(ProjectDir)\out\windows-$(PlatformShortName);$(ExecutablePath)</ExecutablePath>
+    <IntDir>$(ProjectDir)\out\windows-$(PlatformShortName)\objs\$(ConfigurationName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)\out\windows-$(PlatformShortName)</OutDir>
     <ExecutablePath>$(ProjectDir)\out\windows-$(PlatformShortName);$(ExecutablePath)</ExecutablePath>
+    <IntDir>$(ProjectDir)\out\windows-$(PlatformShortName)\objs\$(ConfigurationName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)\out\windows-$(PlatformShortName)</OutDir>
     <ExecutablePath>$(ProjectDir)\out\windows-$(PlatformShortName);$(ExecutablePath)</ExecutablePath>
+    <IntDir>$(ProjectDir)\out\windows-$(PlatformShortName)\objs\$(ConfigurationName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)\out\windows-$(PlatformShortName)</OutDir>
     <ExecutablePath>$(ProjectDir)\out\windows-$(PlatformShortName);$(ExecutablePath)</ExecutablePath>
+    <IntDir>$(ProjectDir)\out\windows-$(PlatformShortName)\objs\$(ConfigurationName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

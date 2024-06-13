@@ -57,6 +57,12 @@
     <ClCompile Include="src\knowledges.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\knowbase.cpp">
+      <Filter>Исходные файлы\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\windows\knwbasew.cpp">
+      <Filter>Исходные файлы\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\version.h">
@@ -85,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="src\utils\pguiman.h">
       <Filter>Файлы заголовков\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\knowbase.h">
+      <Filter>Файлы заголовков\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\windows\knwbasew.h">
+      <Filter>Файлы заголовков\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
