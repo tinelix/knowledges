@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\src&quot;;&quot;$(ProjectDir)\libs\pdcurses&quot;;&quot;$(ProjectDir)\libs\tinydir&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\src&quot;;&quot;$(ProjectDir)\libs\pdcurses&quot;;&quot;$(ProjectDir)\libs\tinydir&quot;;&quot;$(ProjectDir)\libs\jsoncpp\include&quot;"
 				PreprocessorDefinitions="_WIN32;_MSVC;_CONSOLE;_PDCURSES"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -118,7 +118,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\src&quot;;&quot;$(ProjectDir)\libs\pdcurses&quot;;&quot;$(ProjectDir)\libs\tinydir&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\src&quot;;&quot;$(ProjectDir)\libs\pdcurses&quot;;&quot;$(ProjectDir)\libs\tinydir&quot;;&quot;$(ProjectDir)\libs\jsoncpp\include&quot;"
 				PreprocessorDefinitions="_WIN32;_MSVC;_CONSOLE;_PDCURSES"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -212,6 +212,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\utils\knowbase.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\utils\pguiman.cpp"
 					>
 				</File>
@@ -223,6 +227,22 @@
 					RelativePath=".\src\windows\filemanw.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\src\windows\knwbasew.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Libraries"
+				>
+				<Filter
+					Name="JsonCpp"
+					>
+					<File
+						RelativePath=".\libs\jsoncpp\src\lib_json\json_tool.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -241,6 +261,10 @@
 					RelativePath=".\src\windows\filemanw.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\windows\knwbasew.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Utilities"
@@ -251,6 +275,10 @@
 				</File>
 				<File
 					RelativePath=".\src\utils\fileman.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\utils\knowbase.h"
 					>
 				</File>
 				<File
@@ -289,6 +317,26 @@
 					RelativePath=".\src\interfaces\pguiman.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Libraries"
+				>
+				<Filter
+					Name="JsonCpp"
+					>
+					<File
+						RelativePath=".\libs\jsoncpp\src\lib_json\json_reader.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\libs\jsoncpp\src\lib_json\json_value.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\libs\jsoncpp\src\lib_json\json_writer.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
