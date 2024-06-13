@@ -241,7 +241,11 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 
     ListItem* parentItem = gListItems[pIndex2];
 
-    int subItemsCount = gListItems[pIndex2]->subItemsCount;
+    if (!parentItem) {
+        return;
+    }
+
+    int subItemsCount = parentItem->subItemsCount;
 
     if (subItemsCount == 0) return;
 
