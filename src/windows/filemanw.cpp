@@ -100,7 +100,7 @@ void FileManagerWnd::onKeyPressed(char k) {
         if (file.is_dir) { // if it's directory
             gFileMan->readDir(fname);
         }
-        else if (ExtString::strendq(fname, ".mp3")) {
+        else if (ExtString::strendq(fname, ".json")) {
             char msgTitle[] = "Opening file";
             MessageBoxU* pMsgBox = new MessageBoxU(
                 msgTitle, fname, 5, hScreen
@@ -163,7 +163,7 @@ void FileManagerWnd::onDirectoryRead(tinydir_file* files) {
             #endif
         }
         if (i <= mFileListBox->hHeight
-            && ExtString::strendq((char*)files[i].name, ".mp3")) {
+            && ExtString::strendq((char*)files[i].name, ".json")) {
             char full_fname[600];
             #ifdef _MSVC
                 sprintf_s(
@@ -178,17 +178,6 @@ void FileManagerWnd::onDirectoryRead(tinydir_file* files) {
                     files[i].name
                 );
             #endif
-            /*AudioTager* pTagger = new AudioTager();
-            AudioTags* data = pTagger->readTags(full_fname);
-            if (data) {
-                mvwprintw(
-                    hWnd,
-                    mFileListBox->hY + i,
-                    MAX_FILENAME_LENGTH + 19,
-                    "%s - %s",
-                    data->artist, data->title
-                );
-            }*/
         }
         mFileListBox->addListItem(i, item);
     }

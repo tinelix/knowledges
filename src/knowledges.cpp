@@ -41,12 +41,16 @@
 #include <controls/extwnd.h>
 #include <controls/uictrl.h>
 #include <windows/filemanw.h>
+#include <windows/knwbasew.h>
 #include <utils/pguiman.h>
 #include <utils/fileman.h>
+#include <utils/knowbase.h>
 
 PseudoGUIManager* gPsGuiMan;
 FileManager* gFileMan;
-FileManagerWnd* gFileManWnd;
+
+FileManagerWnd      *gFileManWnd;
+KnowledgeBaseWnd    *gKbWnd;
 
 class IKnowledgesFileManager : IFileManager {
 public:
@@ -66,7 +70,7 @@ public:
 IKnowledgesPseudoGUIManager* gPsGUIManInterface;
 
 void openFileManager();
-void openAudioFile(char* pFileName);
+void openKnowledgeBase(char* pFileName);
 
 int main() {
     gPsGUIManInterface = new IKnowledgesPseudoGUIManager();
@@ -91,8 +95,10 @@ void openFileManager() {
     gFileMan->readCurrentDir();
 }
 
-void openAudioFile(char* pFileName) {
-    
+void openKnowledgeBase(char* pFileName) {
+    gKbWnd = new KnowledgeBaseWnd(
+        new KnowledgeBase(pFileName), gPsGuiMan->getScreen()
+    );
 }
 
 /* Handles File Manager errors. */
@@ -129,7 +135,7 @@ void IKnowledgesFileManager::onError(int cmdId, int errorCode) {
 void IKnowledgesFileManager::onResult(int cmdId, int resultCode) {
     gFileManWnd->onFileManResult(cmdId, resultCode);
     if (cmdId == 1) {
-        openAudioFile(gFileManWnd->getSelectedFileName());
+        openKnowledgeBase(gFileManWnd->getSelectedFileName());
     }
 }
 
