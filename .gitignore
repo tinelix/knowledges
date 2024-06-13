@@ -1,8 +1,13 @@
 out/
+
 *.so
 *.o
-.vs/*
+
 *.obj
 *.pdb
 *.dll
+
+.vs/*
+*.ncb
 *.user
+*.suo

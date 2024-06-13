@@ -4,3 +4,6 @@
 [submodule "libs/tinydir"]
 	path = libs/tinydir
 	url = https://github.com/cxong/tinydir
+[submodule "libs/pdcurses"]
+	path = libs/pdcurses
+	url = https://github.com/wmcbrine/PDCurses
