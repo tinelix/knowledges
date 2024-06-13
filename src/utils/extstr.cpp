@@ -113,16 +113,21 @@ char** ExtString::strsplitln(char* out) {
     char** str = (char**)malloc(sizeof(char) * 1024 * strlines(out, useCrlf));
 
     char* stk = NULL;
+
+    #ifdef _MSVC
+        char* next_token1 = NULL;
+    #endif
+
     if (useCrlf) {
         #ifdef _MSVC
-            stk = strtok_s(out, "\r\n", NULL);
+            stk = strtok_s(out, "\r\n", &next_token1);
         #else
             stk = strtok(out, "\r\n");
         #endif
     }
     else {
         #ifdef _MSVC
-            stk = strtok_s(out, "\n", NULL);
+            stk = strtok_s(out, "\n", &next_token1);
         #else
             stk = strtok(out, "\n");
         #endif
@@ -134,14 +139,14 @@ char** ExtString::strsplitln(char* out) {
         str[lines] = stk;
         if (useCrlf) {
             #ifdef _MSVC
-                stk = strtok_s(NULL, "\r\n", NULL);
+                stk = strtok_s(NULL, "\r\n", &next_token1);
             #else
                 stk = strtok(NULL, "\r\n");
             #endif
         }
         else {
             #ifdef _MSVC
-                stk = strtok_s(NULL, "\n", NULL);
+                stk = strtok_s(NULL, "\n", &next_token1);
             #else
                 stk = strtok(NULL, "\n");
             #endif
