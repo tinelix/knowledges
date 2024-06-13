@@ -24,7 +24,7 @@ ExtWindowCtrl::ExtWindowCtrl() {
     hHeight = 8;
     gCtrlSize = 0;
     gChildWndsSize = 0;
-    hCtrls = (UIControl**)malloc(sizeof(UIControl) * 255);
+    hCtrls = (UIControl**)malloc(sizeof(UIControl) * 48);
     hChildWnds = (ExtWindowCtrl**)malloc(sizeof(ExtWindowCtrl) * 16);
 }
 
