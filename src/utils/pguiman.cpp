@@ -28,8 +28,8 @@ int* winver;
 /* Initializes ncurses screen. */
 
 PseudoGUIManager::PseudoGUIManager(IPseudoGUIManager* pInterface) {
-    setlocale(LC_ALL, "");                      /* <-- set locale for correct non-ASCII characters
-                                                       displaying */
+    setlocale(LC_ALL, "");
+                                                      
     screen = initscr();                         /* <-- temporally clearing command prompt and initializes
                                                        empty screen of ncurses */
     keypad(screen, true);                       // <-- enables arrow pressed keys handling
