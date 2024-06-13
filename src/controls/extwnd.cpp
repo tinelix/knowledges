@@ -24,13 +24,13 @@ ExtWindowCtrl::ExtWindowCtrl() {
     hHeight = 8;
     gCtrlSize = 0;
     gChildWndsSize = 0;
-    hCtrls = (UIControl**)malloc(sizeof(UIControl) * 255);
+    hCtrls = (UIControl**)malloc(sizeof(UIControl) * 48);
     hChildWnds = (ExtWindowCtrl**)malloc(sizeof(ExtWindowCtrl) * 16);
 }
 
 ExtWindowCtrl::ExtWindowCtrl(char* pId) {
     #ifdef _MSVC
-        sprintf_s(id, strlen(pId), "%s", pId);
+        sprintf_s(id, 50, "%s", pId);
     #else
         sprintf(id, "%s", pId);
     #endif
@@ -44,7 +44,7 @@ ExtWindowCtrl::ExtWindowCtrl(char* pId) {
 
 ExtWindowCtrl::ExtWindowCtrl(char* pId, ExtWindowCtrl* pParent) {
     #ifdef _MSVC
-        sprintf_s(id, strlen(pId), "%s", pId);
+        sprintf_s(id, 50, "%s", pId);
     #else
         sprintf(id, "%s", pId);
     #endif
