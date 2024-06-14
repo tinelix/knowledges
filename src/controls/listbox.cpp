@@ -246,7 +246,7 @@ void ListBoxCtrl::expand(int pIndex, bool status) {
 
     int pIndex2 = pIndex;
 
-    if (gItemCount < 0) {
+    if (gItemCount <= 0) {
         return;
     }
 
