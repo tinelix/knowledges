@@ -21,7 +21,14 @@
 
 ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos) {
     gParent = pParent;
-    gListItems = (ListItem**)malloc(pItemCount * sizeof(ListItem));
+    if (pItemCount == 0) {
+        mvwprintw(gParent->hWnd, hY, hX, "(empty)");
+        gListItems = (ListItem**)malloc(200 * sizeof(ListItem));
+    }
+    else {
+        gListItems = (ListItem**)malloc(pItemCount * sizeof(ListItem));
+    }
+    
     gSelectionIndex = 0;
     hType = 1;
     gPageNumber = 0;
@@ -46,6 +53,14 @@ void ListBoxCtrl::recreate(int pItemCount) {
     }
     wrefresh(gParent->hWnd);
     free(gListItems);
+    if (pItemCount == 0) {
+        mvwprintw(gParent->hWnd, hY, hX, "(empty)");
+        gListItems = (ListItem**)malloc(200 * sizeof(ListItem));
+        gPageNumber = 0;
+        gSelectionIndex = 0;
+        gItemCount = 0;
+        return;
+    }
     gListItems = (ListItem**)malloc(pItemCount * sizeof(ListItem));
     gPageNumber = 0;
     gSelectionIndex = 0;
@@ -230,6 +245,10 @@ void ListBoxCtrl::onKeyPressed(char k) {
 void ListBoxCtrl::expand(int pIndex, bool status) {
 
     int pIndex2 = pIndex;
+
+    if (gItemCount <= 0) {
+        return;
+    }
 
     if (pIndex > hExpandedItemIndex &&
         pIndex <= hExpandedItemIndex + hSubItemCount) {
