@@ -27,11 +27,11 @@ POSTLIBS		= -lncursesw $(EXT_INCLUDES) -lstdc++
 SOURCES			= $(SRC_DIR)/*.cpp $(SRC_DIR)/utils/*.cpp \
 			  $(SRC_DIR)/windows/*.cpp $(SRC_DIR)/controls/*.cpp \
 			  $(LIBS_DIR)/jsoncpp/src/lib_json/*.cpp
-OUT_FILE=$(OUT_DIR)/knowledges
+OUT_FILE=$(OUT_DIR)/linux/knowledges
 
 # Static libraries linking
 SA_CC_FLAGS 		= -g -std=c++98 -Wall -static
-SA_LIBS			= $(EXT_INCLUDES) -L./out
+SA_LIBS			= $(EXT_INCLUDES) -L./$(OUT_DIR)
 SA_JCPP_FILE		= $(OUT_DIR)/jsoncpp.o
 SA_JCPP_ARCH_FILE	= $(OUT_DIR)/jsoncpp.a
 SA_POSTLIBS		= -lncursesw $(EXT_INCLUDES) -ltinfo -lstdc++
@@ -40,6 +40,7 @@ ifeq ($(OS),Windows_NT)
 	SA_CC_FLAGS 	=  -g -std=c++98 -Wall -s
 	SA_POSTLIBS 	= -lncursesw -lstdc++ $(EXT_INCLUDES) -I/mingw64/include/ncursesw \
 			  -static -DNCURSES_STATIC -DNCURSES_WIDECHAR=1
+	OUT_FILE=$(OUT_DIR)/windows-mingw64/knowledges
 endif
 
 # Clean files function

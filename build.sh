@@ -2,7 +2,12 @@
 
 echo "Building Tinelix Knowledges..."
 
+OUT_FILE=""
+OUT_DIR="out"
+
 if [[ $OSTYPE == "linux-gnu" ]]; then
+    OUT_FILE=${OUT_DIR}/linux/knowledges
+    mkdir -p ./${OUT_DIR}/linux
     echo "Your OS: GNU/Linux"
     echo
     if [ -x "$(command -v apt)" ]; then         # <-- for Ubuntu/Debian/derivatives
@@ -17,6 +22,8 @@ if [[ $OSTYPE == "linux-gnu" ]]; then
         exit 1
     fi
 elif [ $OSTYPE == "cygwin" ]; then
+    OUT_FILE=${OUT_DIR}/windows-mingw64/knowledges
+    mkdir -p ./${OUT_DIR}/windows-mingw64
     echo "Your OS: Cygwin/Windows"
     echo
     if [ -x "$(command -v apt-cyg)" ]; then
@@ -34,6 +41,8 @@ elif [ $OSTYPE == "cygwin" ]; then
         exit 1
     fi
 elif [[ $OSTYPE == "msys" ]]; then
+    OUT_FILE=${OUT_DIR}/windows-mingw64/knowledges
+    mkdir -p ./${OUT_DIR}/windows-mingw64
     echo "Your OS: MSYS2/Windows"
     echo
     pacman -S mingw-w64-{i686,x86_64}-ncurses
@@ -48,5 +57,5 @@ make
 echo
 echo "Build completed!"
 echo
-echo "Run './out/opendss' for testing, 'gdb ./out/opendss' + 'r' for debug"
+echo "Run './${OUT_FILE}' for testing, 'gdb ./${OUT_FILE}' + 'r' for debug"
 cd ./out
