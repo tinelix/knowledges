@@ -1,0 +1,51 @@
+{
+    "tknw0": {
+        "title":      "Образец энциклопедии формата JSON",
+        "categories": [
+                        {
+                            "title":    "Операционные системы",
+                            "articles": [
+                                {
+                                    "title":    "MS-DOS",
+                                    "content":  "Test from MS-DOS page!\r\n\r\nAnd with newlines."
+                                },
+                                {
+                                    "title":    "Windows",
+                                    "content":  "Test from Windows page!\r\n\r\nAnd with newlines."
+                                },
+                                {
+                                    "title":    "Android",
+                                    "content":  "Test from Android page!\r\n\r\nAnd with newlines."
+                                },
+                                {
+                                    "title":    "GNU/Linux",
+                                    "content":  "Test from GNU/Linux page!\r\n\r\nAnd with newlines."
+                                }
+                            ]
+                        },
+                        {
+                            "title":    "Прикладные программы",
+                            "articles": [
+                                {
+                                    "title":    "ShareX",
+                                    "content":  "Test from ShareX page!\r\n\r\nAnd with newlines."
+                                },
+                                {
+                                    "title":    "Android Studio",
+                                    "content":  "Test from Android Studio page!\r\n\r\nAnd with newlines."
+                                }
+                            ]
+                        },
+                        {
+                            "title":    "Интегральные схемы",
+                            "articles": [
+                                {
+                                    "title":    "TDA2003",
+                                    "content":  "Test from TDA2003 page!\r\n\r\nAnd with newlines."
+                                }
+                            ]
+
+                        }
+        ]
+    }
+}
