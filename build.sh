@@ -52,7 +52,7 @@ else
     exit 1
 fi
 
-make
+make standalone
 
 echo
 echo "Build completed!"
