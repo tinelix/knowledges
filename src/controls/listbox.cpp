@@ -23,6 +23,7 @@ ListBoxCtrl::ListBoxCtrl(ExtWindowCtrl* pParent, int pItemCount, bool pTrackPos)
     gParent = pParent;
     if (pItemCount == 0) {
         mvwprintw(gParent->hWnd, hY, hX, "(empty)");
+        wrefresh(gParent->hWnd);
         gListItems = (ListItem**)malloc(200 * sizeof(ListItem));
     }
     else {
@@ -55,6 +56,7 @@ void ListBoxCtrl::recreate(int pItemCount) {
     free(gListItems);
     if (pItemCount == 0) {
         mvwprintw(gParent->hWnd, hY, hX, "(empty)");
+        wrefresh(gParent->hWnd);
         gListItems = (ListItem**)malloc(200 * sizeof(ListItem));
         gPageNumber = 0;
         gSelectionIndex = 0;
@@ -112,7 +114,6 @@ int ListBoxCtrl::getVirtualSelectionIndex() {
         #ifdef _MSVC
             sprintf_s(
                 selection_label, "%d / %d",
-                80,
                 (gPageNumber * hHeight) + gSelectionIndex + 1, gItemCount
             );
         #else
